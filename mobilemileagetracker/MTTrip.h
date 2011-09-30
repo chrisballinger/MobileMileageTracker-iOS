@@ -25,11 +25,10 @@
     
 }
 
--(id)initWithName:(NSString*)newName deviceURI:(NSString*)URI;
-+(MTTrip*)tripWithName:(NSString*)newName deviceURI:(NSString*)URI;
+-(id)initWithName:(NSString*)newName device:(MTDevice*)newDevice;
++(MTTrip*)tripWithName:(NSString*)newName device:(MTDevice*)newDevice;
 
 @property (nonatomic, retain) NSString *name;
-@property (nonatomic, retain) NSString *deviceURI;
 @property (nonatomic, retain) MTDevice *device;
 
 @end

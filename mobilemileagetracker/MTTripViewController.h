@@ -1,5 +1,5 @@
 //
-//  MTDeviceViewController.h
+//  MTTripViewController.h
 //  mobilemileagetracker
 //
 //  Created by Chris Ballinger on 9/30/11.
@@ -9,10 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "MTObjectStore.h"
 
-@interface MTDeviceViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
-@property (retain, nonatomic) IBOutlet UITableView *deviceTableView;
+@interface MTTripViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
+@property (retain, nonatomic) IBOutlet UITableView *tripTableView;
 @property (nonatomic, retain) MTObjectStore *objectStore;
-
-@property BOOL isChoosingDevice;
 
 @end

@@ -7,14 +7,13 @@
 //
 
 #import "MTTrip.h"
+#import "MTObjectStore.h"
+#import "APIUtil.h"
 
 @implementation MTTrip
 
 @synthesize name;
 @synthesize device;
-@synthesize deviceURI;
-
-
 
 -(id) init
 {
@@ -23,25 +22,24 @@
     {
         name = nil;
         device = nil;
-        deviceURI = nil;
     }
     return self;
 }
 
--(id)initWithName:(NSString*)newName deviceURI:(NSString*)URI
+-(id)initWithName:(NSString*)newName device:(MTDevice*)newDevice
 {
     self = [self init];
     if(self)
     {
         name = newName;
-        deviceURI = URI;
+        device = newDevice;
     }
     return self;
 }
 
-+(MTTrip*)tripWithName:(NSString*)newName deviceURI:(NSString*)URI
++(MTTrip*)tripWithName:(NSString*)newName device:(MTDevice*)newDevice
 {
-    MTTrip *trip = [[[MTTrip alloc] initWithName:newName deviceURI:URI] autorelease];
+    MTTrip *trip = [[[MTTrip alloc] initWithName:newName device:newDevice] autorelease];
     return trip;
 }
 
@@ -58,7 +56,12 @@
     if(!objects)
         objects = fields;
     name = [[objects objectForKey:kTripNameKey] retain];
-    deviceURI = [[objects objectForKey:kTripDeviceKey] retain];
+    NSString *deviceURI = [objects objectForKey:kTripDeviceKey];
+    MTObjectStore *objectStore = [MTObjectStore sharedInstance];
+    device = (MTDevice*)[objectStore getObjectForURI:deviceURI];
+    
+    super._id = [[fields objectForKey:kIDKey] retain];
+
 }
 
 -(NSDictionary*)toDictionary
@@ -66,15 +69,50 @@
     /*Create Trip
         {"name": "Chris Trip", "device": "/api/v1/device/1/"}
      */
-    NSArray *objectArray = [NSArray arrayWithObjects:name, deviceURI, nil];
-    NSArray *keyArray = [NSArray arrayWithObjects:kTripNameKey, kTripDeviceKey, nil];
+    NSMutableArray *objectArray = [NSMutableArray arrayWithObjects:name, device.resourceURI, nil];
+    NSMutableArray *keyArray = [NSMutableArray arrayWithObjects:kTripNameKey, kTripDeviceKey, nil];
+    
+    if(super._id)
+    {
+        [objectArray addObject:super._id];
+        [keyArray addObject:kIDKey];
+    }
+    
     return [NSDictionary dictionaryWithObjects:objectArray forKeys:keyArray];
 }
 
 +(NSURL*)RESTurl
 {
-    NSURL *url = [NSURL URLWithString:kAPIURLTripSuffix relativeToURL:[[super class] RESTurl]];
+    NSString *urlStart = [APIUtil RESTurlString];
+    
+    NSString *urlString = [urlStart stringByAppendingString:kAPIURLTripSuffix];
+    
+    NSURL *url = [NSURL URLWithString:urlString];
     return url;
+}
+
++(NSArray*)objectsWithData:(NSData*)jsonData
+{
+    /*{"meta": {"limit": 20, "next": null, "offset": 0, "previous": null, "total_count": 1}, "objects": [{"device_type": "iPhone", "id": "1", "name": "Chris Phone", "resource_uri": "/api/v1/device/1/", "user": "/api/v1/user/1/", "uuid": "1"}]}
+     */
+    MTAPIObject *apiObject = [[MTAPIObject alloc] initWithData:jsonData];
+    
+    if(apiObject.totalCount > 0)
+    {
+        NSMutableArray *devicesArray = [[NSMutableArray alloc] initWithCapacity:apiObject.totalCount];
+        
+        NSArray *rawDevicesArray = apiObject.objects;
+        
+        for(int i = 0; i < apiObject.totalCount; i++)
+        {
+            NSDictionary *rawDevice = [rawDevicesArray objectAtIndex:i];
+            MTTrip *trip = [[MTTrip alloc] initWithDictionary:rawDevice];
+            [devicesArray addObject:trip];
+        }
+        return devicesArray;
+    }
+    
+    return nil;
 }
 
 @end

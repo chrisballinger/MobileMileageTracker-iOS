@@ -6,22 +6,23 @@
 //  Copyright (c) 2011 __MyCompanyName__. All rights reserved.
 //
 
-#import "MTDeviceViewController.h"
+#import "MTTripViewController.h"
 #import "MTAccountController.h"
 #import "ASIHTTPRequest.h"
-#import "MTDevice.h"
-#import "MTDeviceDetailViewController.h"
+#import "MTTrip.h"
+#import "MTTripDetailViewController.h"
 
-@implementation MTDeviceViewController
-@synthesize deviceTableView;
+@implementation MTTripViewController
+@synthesize tripTableView;
 @synthesize objectStore;
-@synthesize isChoosingDevice;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         // Custom initialization
+        self.title = @"Trips";
+        objectStore = [MTObjectStore sharedInstance];
     }
     return self;
 }
@@ -40,11 +41,7 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    if(isChoosingDevice)
-        self.title = @"Choose Device";
-    else
-        self.title = @"Devices";
-    objectStore = [MTObjectStore sharedInstance];
+    
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -59,7 +56,7 @@
     else
     {
         
-        ASIFormDataRequest *request = [MTAPIObject requestWithURL:[MTDevice RESTurl] filters:nil];
+        ASIFormDataRequest *request = [MTAPIObject requestWithURL:[MTTrip RESTurl] filters:nil];
         [request setDelegate:self];
         [request startAsynchronous];
     }
@@ -67,9 +64,9 @@
 
 - (void)requestFinished:(ASIFormDataRequest *)request
 {
-    [objectStore addObjects:[MTDevice objectsWithData:[request responseData]]];
+    [objectStore addObjects:[MTTrip objectsWithData:[request responseData]]];
     NSLog(@"HTTP code %d:\n%@", [request responseStatusCode], [request responseString]);
-    [deviceTableView reloadData];
+    [tripTableView reloadData];
 }
 
 - (void)requestFailed:(ASIFormDataRequest *)request
@@ -83,7 +80,7 @@
 
 - (void)viewDidUnload
 {
-    [self setDeviceTableView:nil];
+    [self setTripTableView:nil];
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
@@ -96,7 +93,7 @@
 }
 
 - (void)dealloc {
-    [deviceTableView release];
+    [tripTableView release];
     [super dealloc];
 }
 
@@ -109,10 +106,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if(!isChoosingDevice)
-        return [[objectStore getDevices] count] + 1;
-    else
-        return [[objectStore getDevices] count];
+    return [[objectStore getTrips] count] + 1;   
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -123,54 +117,39 @@
 		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"Cell"];
 	}
 	
-    NSDictionary *devices = [objectStore getDevices];
-    if(indexPath.row < [devices count])
+    NSDictionary *trips = [objectStore getTrips];
+    if(indexPath.row < [trips count])
     {
-        NSArray *allDevices = [devices allValues];
-        MTDevice *device = [allDevices objectAtIndex:indexPath.row];
-        cell.textLabel.text = device.name;
-        cell.detailTextLabel.text = device.deviceType;
+        NSArray *allTrips = [trips allValues];
+        MTTrip *trip = [allTrips objectAtIndex:indexPath.row];
+        cell.textLabel.text = trip.name;
+        cell.detailTextLabel.text = trip.device.name;
     }
-    if(indexPath.row == [devices count] && !isChoosingDevice)
+    if(indexPath.row == [trips count])
     {
-        cell.textLabel.text = @"Add New Device";
+        cell.textLabel.text = @"Add New Trip";
     }
     
-    if(!isChoosingDevice)
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     
 	return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    NSDictionary *trips = [objectStore getTrips];
+    MTTrip *trip = nil;
+    if(indexPath.row < [trips count])
+    {
+        NSArray *allTrips = [trips allValues];
+        trip = [allTrips objectAtIndex:indexPath.row];
+    }
+    MTTripDetailViewController *tripDetailController = [[MTTripDetailViewController alloc] init];
+    tripDetailController.trip = trip;
+    [self.navigationController pushViewController:tripDetailController animated:YES];
+    [tripDetailController release];
+    
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-
-    NSDictionary *devices = [objectStore getDevices];
-    MTDevice *device = nil;
-    if(indexPath.row < [devices count])
-    {
-        NSArray *allDevices = [devices allValues];
-        device = [allDevices objectAtIndex:indexPath.row];
-    }
-    
-    if(isChoosingDevice)
-    {
-        NSDictionary *deviceInfo = [NSDictionary dictionaryWithObject:device forKey:@"device"];
-        [[NSNotificationCenter defaultCenter]
-         postNotificationName:@"DeviceChosenNotification"
-         object:self userInfo:deviceInfo];
-        
-        [self.navigationController popViewControllerAnimated:YES];
-    }
-    else
-    {
-    
-        MTDeviceDetailViewController *deviceDetailController = [[MTDeviceDetailViewController alloc] init];
-        deviceDetailController.device = device;
-        [self.navigationController pushViewController:deviceDetailController animated:YES];
-        [deviceDetailController release];
-    }
 }
 
 @end

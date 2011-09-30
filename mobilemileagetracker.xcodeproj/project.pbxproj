@@ -43,6 +43,10 @@
 		D98D6D6314363F2A00B3B849 /* MTDeviceDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D98D6D6114363F2A00B3B849 /* MTDeviceDetailViewController.m */; };
 		D98D6D6414363F2A00B3B849 /* MTDeviceDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D98D6D6214363F2A00B3B849 /* MTDeviceDetailViewController.xib */; };
 		D98D6D681436430A00B3B849 /* MTObjectStore.m in Sources */ = {isa = PBXBuildFile; fileRef = D98D6D671436430A00B3B849 /* MTObjectStore.m */; };
+		D98D6D741436593D00B3B849 /* MTTripViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D98D6D721436593C00B3B849 /* MTTripViewController.m */; };
+		D98D6D751436593D00B3B849 /* MTTripViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D98D6D731436593D00B3B849 /* MTTripViewController.xib */; };
+		D98D6D7914365AF500B3B849 /* MTTripDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D98D6D7714365AF400B3B849 /* MTTripDetailViewController.m */; };
+		D98D6D7A14365AF500B3B849 /* MTTripDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D98D6D7814365AF400B3B849 /* MTTripDetailViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -112,6 +116,12 @@
 		D98D6D6214363F2A00B3B849 /* MTDeviceDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MTDeviceDetailViewController.xib; sourceTree = "<group>"; };
 		D98D6D661436430A00B3B849 /* MTObjectStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTObjectStore.h; sourceTree = "<group>"; };
 		D98D6D671436430A00B3B849 /* MTObjectStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTObjectStore.m; sourceTree = "<group>"; };
+		D98D6D711436593C00B3B849 /* MTTripViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTTripViewController.h; sourceTree = "<group>"; };
+		D98D6D721436593C00B3B849 /* MTTripViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTTripViewController.m; sourceTree = "<group>"; };
+		D98D6D731436593D00B3B849 /* MTTripViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MTTripViewController.xib; sourceTree = "<group>"; };
+		D98D6D7614365AF400B3B849 /* MTTripDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTTripDetailViewController.h; sourceTree = "<group>"; };
+		D98D6D7714365AF400B3B849 /* MTTripDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTTripDetailViewController.m; sourceTree = "<group>"; };
+		D98D6D7814365AF400B3B849 /* MTTripDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MTTripDetailViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -181,6 +191,12 @@
 				D9308853143593FB00EFC33F /* MTAccountController.h */,
 				D9308854143593FB00EFC33F /* MTAccountController.m */,
 				D9308855143593FC00EFC33F /* MTAccountController.xib */,
+				D98D6D711436593C00B3B849 /* MTTripViewController.h */,
+				D98D6D721436593C00B3B849 /* MTTripViewController.m */,
+				D98D6D731436593D00B3B849 /* MTTripViewController.xib */,
+				D98D6D7614365AF400B3B849 /* MTTripDetailViewController.h */,
+				D98D6D7714365AF400B3B849 /* MTTripDetailViewController.m */,
+				D98D6D7814365AF400B3B849 /* MTTripDetailViewController.xib */,
 				D930886B1435980900EFC33F /* MTDeviceViewController.h */,
 				D930886C1435980900EFC33F /* MTDeviceViewController.m */,
 				D930886D1435980A00EFC33F /* MTDeviceViewController.xib */,
@@ -340,6 +356,8 @@
 				D93088601435955100EFC33F /* MTLocationTrackerController.xib in Resources */,
 				D930886F1435980A00EFC33F /* MTDeviceViewController.xib in Resources */,
 				D98D6D6414363F2A00B3B849 /* MTDeviceDetailViewController.xib in Resources */,
+				D98D6D751436593D00B3B849 /* MTTripViewController.xib in Resources */,
+				D98D6D7A14365AF500B3B849 /* MTTripDetailViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -373,6 +391,8 @@
 				D930886E1435980A00EFC33F /* MTDeviceViewController.m in Sources */,
 				D98D6D6314363F2A00B3B849 /* MTDeviceDetailViewController.m in Sources */,
 				D98D6D681436430A00B3B849 /* MTObjectStore.m in Sources */,
+				D98D6D741436593D00B3B849 /* MTTripViewController.m in Sources */,
+				D98D6D7914365AF500B3B849 /* MTTripDetailViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -409,7 +429,7 @@
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -426,7 +446,7 @@
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
@@ -439,6 +459,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "mobilemileagetracker/mobilemileagetracker-Prefix.pch";
 				INFOPLIST_FILE = "mobilemileagetracker/mobilemileagetracker-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -450,6 +471,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "mobilemileagetracker/mobilemileagetracker-Prefix.pch";
 				INFOPLIST_FILE = "mobilemileagetracker/mobilemileagetracker-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};

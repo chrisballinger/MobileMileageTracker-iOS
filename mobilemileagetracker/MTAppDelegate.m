@@ -9,6 +9,7 @@
 #import "MTAppDelegate.h"
 #import "MTDeviceViewController.h"
 #import "MTLocationTrackerController.h"
+#import "MTTripViewController.h"
 
 @implementation MTAppDelegate
 
@@ -30,10 +31,12 @@
     MTDeviceViewController *deviceController = [[MTDeviceViewController alloc] init];
     UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:deviceController];
     MTLocationTrackerController *locationTrackerController = [[MTLocationTrackerController alloc] init];
-    UIViewController *navController2 = [[UINavigationController alloc] initWithRootViewController:locationTrackerController];
+    UINavigationController *navController2 = [[UINavigationController alloc] initWithRootViewController:locationTrackerController];
+    MTTripViewController *tripController = [[MTTripViewController alloc] init];
+    UINavigationController *navController3 = [[UINavigationController alloc] initWithRootViewController:tripController];
     
     self.tabBarController = [[UITabBarController alloc] init];
-    self.tabBarController.viewControllers = [NSArray arrayWithObjects:navController, navController2, nil];
+    self.tabBarController.viewControllers = [NSArray arrayWithObjects:navController, navController3, navController2, nil];
     self.window.rootViewController = self.tabBarController;
     [self.window makeKeyAndVisible];
     return YES;
