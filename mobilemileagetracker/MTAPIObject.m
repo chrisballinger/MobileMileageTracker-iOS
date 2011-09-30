@@ -106,10 +106,31 @@
     return url;
 }
 
-+(ASIFormDataRequest*)requestWithFilters:(NSDictionary*)filters;
++(ASIFormDataRequest*)requestWithURL:(NSURL*)url filters:(NSDictionary*)filters
 {
-    return nil;
+    ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:url];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    
+    if(filters)
+    {
+        NSArray *allKeys = [filters allKeys];
+        for(int i = 0; i < [allKeys count]; i++)
+        {
+            NSString *key = [allKeys objectAtIndex:i];
+            NSString *value = [filters objectForKey:key];
+            [request setPostValue:value forKey:key];
+        }
+    }
+    //[request setPostValue:@"json" forKey:@"format"];
+    NSString *username = [defaults objectForKey:@"username"];
+    NSString *password = [defaults objectForKey:@"password"];
+    [request addRequestHeader:@"Content-Type" value:@"application/json"];
+    [request setUsername:username];
+    [request setPassword:password];
+    
+    return request;
 }
+
 
 +(NSArray*)objectsWithData:(NSData*)jsonData
 {

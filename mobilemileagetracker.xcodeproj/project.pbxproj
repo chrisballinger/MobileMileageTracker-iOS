@@ -40,6 +40,9 @@
 		D930886A1435965600EFC33F /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D93088691435965600EFC33F /* MobileCoreServices.framework */; };
 		D930886E1435980A00EFC33F /* MTDeviceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D930886C1435980900EFC33F /* MTDeviceViewController.m */; };
 		D930886F1435980A00EFC33F /* MTDeviceViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D930886D1435980A00EFC33F /* MTDeviceViewController.xib */; };
+		D98D6D6314363F2A00B3B849 /* MTDeviceDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D98D6D6114363F2A00B3B849 /* MTDeviceDetailViewController.m */; };
+		D98D6D6414363F2A00B3B849 /* MTDeviceDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D98D6D6214363F2A00B3B849 /* MTDeviceDetailViewController.xib */; };
+		D98D6D681436430A00B3B849 /* MTObjectStore.m in Sources */ = {isa = PBXBuildFile; fileRef = D98D6D671436430A00B3B849 /* MTObjectStore.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -104,6 +107,11 @@
 		D930886B1435980900EFC33F /* MTDeviceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDeviceViewController.h; sourceTree = "<group>"; };
 		D930886C1435980900EFC33F /* MTDeviceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDeviceViewController.m; sourceTree = "<group>"; };
 		D930886D1435980A00EFC33F /* MTDeviceViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MTDeviceViewController.xib; sourceTree = "<group>"; };
+		D98D6D6014363F2A00B3B849 /* MTDeviceDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDeviceDetailViewController.h; sourceTree = "<group>"; };
+		D98D6D6114363F2A00B3B849 /* MTDeviceDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDeviceDetailViewController.m; sourceTree = "<group>"; };
+		D98D6D6214363F2A00B3B849 /* MTDeviceDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MTDeviceDetailViewController.xib; sourceTree = "<group>"; };
+		D98D6D661436430A00B3B849 /* MTObjectStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTObjectStore.h; sourceTree = "<group>"; };
+		D98D6D671436430A00B3B849 /* MTObjectStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTObjectStore.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -164,7 +172,9 @@
 				D930880A143569BD00EFC33F /* API */,
 				D93087FA143567BA00EFC33F /* MTAppDelegate.h */,
 				D93087FB143567BA00EFC33F /* MTAppDelegate.m */,
-				D93087F2143567BA00EFC33F /* Supporting Files */,
+				D98D6D6014363F2A00B3B849 /* MTDeviceDetailViewController.h */,
+				D98D6D6114363F2A00B3B849 /* MTDeviceDetailViewController.m */,
+				D98D6D6214363F2A00B3B849 /* MTDeviceDetailViewController.xib */,
 				D930885C1435954F00EFC33F /* MTLocationTrackerController.h */,
 				D930885D1435954F00EFC33F /* MTLocationTrackerController.m */,
 				D930885E1435955000EFC33F /* MTLocationTrackerController.xib */,
@@ -174,6 +184,7 @@
 				D930886B1435980900EFC33F /* MTDeviceViewController.h */,
 				D930886C1435980900EFC33F /* MTDeviceViewController.m */,
 				D930886D1435980A00EFC33F /* MTDeviceViewController.xib */,
+				D93087F2143567BA00EFC33F /* Supporting Files */,
 			);
 			path = mobilemileagetracker;
 			sourceTree = "<group>";
@@ -192,6 +203,8 @@
 		D930880A143569BD00EFC33F /* API */ = {
 			isa = PBXGroup;
 			children = (
+				D98D6D661436430A00B3B849 /* MTObjectStore.h */,
+				D98D6D671436430A00B3B849 /* MTObjectStore.m */,
 				D930880E14356C1A00EFC33F /* MTAPIObjectProtocol.h */,
 				D930881F1435703B00EFC33F /* MTAPIObject.h */,
 				D93088201435703C00EFC33F /* MTAPIObject.m */,
@@ -326,6 +339,7 @@
 				D9308857143593FC00EFC33F /* MTAccountController.xib in Resources */,
 				D93088601435955100EFC33F /* MTLocationTrackerController.xib in Resources */,
 				D930886F1435980A00EFC33F /* MTDeviceViewController.xib in Resources */,
+				D98D6D6414363F2A00B3B849 /* MTDeviceDetailViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -357,6 +371,8 @@
 				D9308856143593FC00EFC33F /* MTAccountController.m in Sources */,
 				D930885F1435955100EFC33F /* MTLocationTrackerController.m in Sources */,
 				D930886E1435980A00EFC33F /* MTDeviceViewController.m in Sources */,
+				D98D6D6314363F2A00B3B849 /* MTDeviceDetailViewController.m in Sources */,
+				D98D6D681436430A00B3B849 /* MTObjectStore.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

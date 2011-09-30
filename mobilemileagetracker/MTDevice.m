@@ -71,8 +71,15 @@
     /*Create Device
      '{"device_type": "iPhone", "name": "Chris Phone", "uuid": "1"}'
      */
-    NSArray *objectArray = [NSArray arrayWithObjects:deviceType, name, uuid, nil];
-    NSArray *keyArray = [NSArray arrayWithObjects:kDeviceTypeKey, kDeviceNameKey, kDeviceUUIDKey, nil];
+    NSMutableArray *objectArray = [NSMutableArray arrayWithObjects:deviceType, name, uuid, nil];
+    NSMutableArray *keyArray = [NSMutableArray arrayWithObjects:kDeviceTypeKey, kDeviceNameKey, kDeviceUUIDKey, nil];
+    
+    if(super._id)
+    {
+        [objectArray addObject:super._id];
+        [keyArray addObject:kIDKey];
+    }
+    
     return [NSDictionary dictionaryWithObjects:objectArray forKeys:keyArray];
 }
 
@@ -86,32 +93,6 @@
     return url;
 }
 
-+(ASIFormDataRequest*)requestWithFilters:(NSDictionary*)filters
-{
-    NSURL *url = [[self class] RESTurl];
-    ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:url];
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    
-    if(filters)
-    {
-        NSArray *allKeys = [filters allKeys];
-        for(int i = 0; i < [allKeys count]; i++)
-        {
-            NSString *key = [allKeys objectAtIndex:i];
-            NSString *value = [filters objectForKey:key];
-            [request setPostValue:value forKey:key];
-        }
-    }
-    //[request setPostValue:@"json" forKey:@"format"];
-    NSString *username = [defaults objectForKey:@"username"];
-    NSString *password = [defaults objectForKey:@"password"];
-    [request setUsername:username];
-    [request setPassword:password];
-    
-    
-    
-    return request;
-}
 
 +(NSArray*)objectsWithData:(NSData*)jsonData
 {
@@ -136,5 +117,7 @@
     
     return nil;
 }
+
+
 
 @end

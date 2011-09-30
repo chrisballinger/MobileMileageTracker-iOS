@@ -10,10 +10,11 @@
 #import "MTAccountController.h"
 #import "ASIHTTPRequest.h"
 #import "MTDevice.h"
+#import "MTDeviceDetailViewController.h"
 
 @implementation MTDeviceViewController
 @synthesize deviceTableView;
-@synthesize devices;
+@synthesize objectStore;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -21,6 +22,7 @@
     if (self) {
         // Custom initialization
         self.title = @"Devices";
+        objectStore = [MTObjectStore sharedInstance];
     }
     return self;
 }
@@ -53,17 +55,17 @@
     }
     else
     {
-        ASIFormDataRequest *request = [MTDevice requestWithFilters:nil];
+        
+        ASIFormDataRequest *request = [MTAPIObject requestWithURL:[MTDevice RESTurl] filters:nil];
         [request setDelegate:self];
         [request startAsynchronous];
-        NSLog(@"this is bullshit");
     }
 }
 
 - (void)requestFinished:(ASIFormDataRequest *)request
 {
-    devices = [MTDevice objectsWithData:[request responseData]];
-    NSLog(@"%@ - %d",[request responseString], [request responseStatusCode]);
+    [objectStore addObjects:[MTDevice objectsWithData:[request responseData]]];
+    NSLog(@"HTTP code %d:\n%@", [request responseStatusCode], [request responseString]);
     [deviceTableView reloadData];
 }
 
@@ -104,12 +106,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if(devices)
-    {
-        return [devices count];
-    }
-    
-    return 0;
+    return [[objectStore getDevices] count];   
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -120,9 +117,11 @@
 		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"Cell"];
 	}
 	
-    if(devices)
+    NSDictionary *devices = [objectStore getDevices];
+    if([devices count] > 0)
     {
-        MTDevice *device = [devices objectAtIndex:indexPath.row];
+        NSArray *allDevices = [devices allValues];
+        MTDevice *device = [allDevices objectAtIndex:indexPath.row];
         cell.textLabel.text = device.name;
         cell.detailTextLabel.text = device.deviceType;
     }
@@ -132,6 +131,16 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    NSDictionary *devices = [objectStore getDevices];
+    if([devices count] > 0)
+    {
+        NSArray *allDevices = [devices allValues];
+        MTDevice *device = [allDevices objectAtIndex:indexPath.row];
+        MTDeviceDetailViewController *deviceDetailController = [[MTDeviceDetailViewController alloc] init];
+        deviceDetailController.device = device;
+        [self.navigationController pushViewController:deviceDetailController animated:YES];
+        [deviceDetailController release];
+    }
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 

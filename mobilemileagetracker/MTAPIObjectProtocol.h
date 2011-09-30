@@ -19,7 +19,7 @@
 -(NSDictionary*) toDictionary;
 
 +(NSURL*)RESTurl;
-+(ASIFormDataRequest*)requestWithFilters:(NSDictionary*)filters;
++(ASIFormDataRequest*)requestWithURL:(NSURL*)url filters:(NSDictionary*)filters;
 +(NSArray*)objectsWithData:(NSData*)jsonData;
 
 @end

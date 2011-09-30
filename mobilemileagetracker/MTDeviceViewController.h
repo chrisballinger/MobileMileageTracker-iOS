@@ -7,9 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MTObjectStore.h"
 
 @interface MTDeviceViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
 @property (retain, nonatomic) IBOutlet UITableView *deviceTableView;
-@property (nonatomic, retain) NSArray *devices;
+@property (nonatomic, retain) MTObjectStore *objectStore;
 
 @end
