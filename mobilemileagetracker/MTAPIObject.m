@@ -20,6 +20,7 @@
 @synthesize totalCount;
 @synthesize resourceURI;
 @synthesize user;
+@synthesize objects;
 
 -(id)init
 {
@@ -34,6 +35,7 @@
         totalCount = -1;
         resourceURI = nil;
         user = nil;
+        objects = nil;
     }
     return self;
 }
@@ -71,12 +73,13 @@
         next = [[meta objectForKey:kMetaNextKey] retain];
         previous = [[meta objectForKey:kMetaPreviousKey] retain];
     }
-    NSDictionary *objects = [fields objectForKey:kObjectsKey];
+    objects = [fields objectForKey:kObjectsKey];
     if(!objects)
-        objects = fields;
-    _id = [[objects objectForKey:kIDKey] retain];
-    resourceURI = [[objects objectForKey:kResourceURIKey] retain];
-    user = [[objects objectForKey:kUserKey] retain];
+    {
+        _id = [[fields objectForKey:kIDKey] retain];
+        resourceURI = [[fields objectForKey:kResourceURIKey] retain];
+        user = [[fields objectForKey:kUserKey] retain];
+    }
 }
 
 -(void) parseJSON: (NSData*) jsonData
@@ -99,8 +102,18 @@
 
 +(NSURL*)RESTurl
 {
-    NSURL* url = [NSURL URLWithString:kAPIURLPrefix relativeToURL:[APIUtil hostURL]];
+    NSURL* url = [NSURL URLWithString:[APIUtil RESTurlString]];
     return url;
+}
+
++(ASIFormDataRequest*)requestWithFilters:(NSDictionary*)filters;
+{
+    return nil;
+}
+
++(NSArray*)objectsWithData:(NSData*)jsonData
+{
+    return nil;
 }
 
 @end

@@ -36,6 +36,7 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    [accountTextField becomeFirstResponder];
 }
 
 - (void)viewDidUnload
@@ -59,5 +60,20 @@
     [super dealloc];
 }
 - (IBAction)loginPressed:(id)sender {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    
+    [defaults setObject:accountTextField.text forKey:@"username"];
+    [defaults setObject:passwordTextField.text forKey:@"password"];
+    
+    [defaults synchronize];
+    
+    [self dismissModalViewControllerAnimated:YES];
 }
+
+-(BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [textField resignFirstResponder];
+    return YES;
+}
+
 @end

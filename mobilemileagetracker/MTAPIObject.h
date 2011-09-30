@@ -21,7 +21,6 @@
 #define kResourceURIKey @"resource_uri"
 #define kUserKey @"user"
 
-#define kAPIURLPrefix @"api/v1/"
 
 @interface MTAPIObject : NSObject <MTAPIObjectProtocol>
 {
@@ -33,9 +32,11 @@
 @property (readonly) int offset;
 @property (readonly) int totalCount;
 
-@property (readonly, retain) NSString *_id;
+@property (nonatomic, retain) NSString *_id;
 @property (readonly, retain) NSString *resourceURI;
 @property (readonly, retain) NSString *user;
+@property (readonly, retain) NSArray *objects;
+
 
 /*
  "meta": {"limit": 20, "next": null, "offset": 0, "previous": null, "total_count": 1},

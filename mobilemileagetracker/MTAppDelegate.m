@@ -7,7 +7,7 @@
 //
 
 #import "MTAppDelegate.h"
-#import "MTAccountController.h"
+#import "MTDeviceViewController.h"
 #import "MTLocationTrackerController.h"
 
 @implementation MTAppDelegate
@@ -27,8 +27,8 @@
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.
     
-    MTAccountController *accountController = [[MTAccountController alloc] init];
-    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:accountController];
+    MTDeviceViewController *deviceController = [[MTDeviceViewController alloc] init];
+    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:deviceController];
     MTLocationTrackerController *locationTrackerController = [[MTLocationTrackerController alloc] init];
     UIViewController *navController2 = [[UINavigationController alloc] initWithRootViewController:locationTrackerController];
     

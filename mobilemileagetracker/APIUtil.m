@@ -10,10 +10,17 @@
 
 @implementation APIUtil
 
-+(NSURL*)hostURL
+#define kAPIURLPrefix @"api/v1/"
+
++(NSString*)hostURLString
 {
-    NSURL *url = [NSURL URLWithString:kHostURL];
-    return url;
+    return kHostURL;
+}
+
++(NSString*)RESTurlString
+{
+    NSString* urlString = [[APIUtil hostURLString] stringByAppendingString:kAPIURLPrefix];
+    return urlString;
 }
 
 @end

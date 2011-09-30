@@ -7,6 +7,7 @@
 //
 
 #import "MTDevice.h"
+#import "APIUtil.h"
 
 @implementation MTDevice
 
@@ -59,12 +60,10 @@
     /*{"meta": {"limit": 20, "next": null, "offset": 0, "previous": null, "total_count": 1}, "objects": [{"device_type": "iPhone", "id": "1", "name": "Chris Phone", "resource_uri": "/api/v1/device/1/", "user": "/api/v1/user/1/", "uuid": "1"}]}*/
     [super parseDictionary:fields];
     
-    NSDictionary *objects = [fields objectForKey:kObjectsKey];
-    if(!objects)
-        objects = fields;
-    name = [[objects objectForKey:kDeviceNameKey] retain];
-    deviceType = [[objects objectForKey:kDeviceTypeKey] retain];
-    uuid = [[objects objectForKey:kDeviceUUIDKey] retain];
+    name = [[fields objectForKey:kDeviceNameKey] retain];
+    deviceType = [[fields objectForKey:kDeviceTypeKey] retain];
+    uuid = [[fields objectForKey:kDeviceUUIDKey] retain];
+    super._id = [[fields objectForKey:kIDKey] retain];
 }
 
 -(NSDictionary*)toDictionary
@@ -79,8 +78,63 @@
 
 +(NSURL*)RESTurl
 {
-    NSURL *url = [NSURL URLWithString:kAPIURLDeviceSuffix relativeToURL:[[super class] RESTurl]];
+    NSString *urlStart = [APIUtil RESTurlString];
+    
+    NSString *urlString = [urlStart stringByAppendingString:kAPIURLDeviceSuffix];
+    
+    NSURL *url = [NSURL URLWithString:urlString];
     return url;
+}
+
++(ASIFormDataRequest*)requestWithFilters:(NSDictionary*)filters
+{
+    NSURL *url = [[self class] RESTurl];
+    ASIFormDataRequest *request = [ASIFormDataRequest requestWithURL:url];
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    
+    if(filters)
+    {
+        NSArray *allKeys = [filters allKeys];
+        for(int i = 0; i < [allKeys count]; i++)
+        {
+            NSString *key = [allKeys objectAtIndex:i];
+            NSString *value = [filters objectForKey:key];
+            [request setPostValue:value forKey:key];
+        }
+    }
+    //[request setPostValue:@"json" forKey:@"format"];
+    NSString *username = [defaults objectForKey:@"username"];
+    NSString *password = [defaults objectForKey:@"password"];
+    [request setUsername:username];
+    [request setPassword:password];
+    
+    
+    
+    return request;
+}
+
++(NSArray*)objectsWithData:(NSData*)jsonData
+{
+    /*{"meta": {"limit": 20, "next": null, "offset": 0, "previous": null, "total_count": 1}, "objects": [{"device_type": "iPhone", "id": "1", "name": "Chris Phone", "resource_uri": "/api/v1/device/1/", "user": "/api/v1/user/1/", "uuid": "1"}]}
+     */
+    MTAPIObject *apiObject = [[MTAPIObject alloc] initWithData:jsonData];
+    
+    if(apiObject.totalCount > 0)
+    {
+        NSMutableArray *devicesArray = [[NSMutableArray alloc] initWithCapacity:apiObject.totalCount];
+        
+        NSArray *rawDevicesArray = apiObject.objects;
+        
+        for(int i = 0; i < apiObject.totalCount; i++)
+        {
+            NSDictionary *rawDevice = [rawDevicesArray objectAtIndex:i];
+            MTDevice *device = [[MTDevice alloc] initWithDictionary:rawDevice];
+            [devicesArray addObject:device];
+        }
+        return devicesArray;
+    }
+    
+    return nil;
 }
 
 @end

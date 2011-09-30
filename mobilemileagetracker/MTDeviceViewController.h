@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MTDeviceViewController : UIViewController
+@interface MTDeviceViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
+@property (retain, nonatomic) IBOutlet UITableView *deviceTableView;
+@property (nonatomic, retain) NSArray *devices;
 
 @end

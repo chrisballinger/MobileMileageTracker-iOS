@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MTAccountController : UIViewController
+@interface MTAccountController : UIViewController <UITextFieldDelegate>
 
 @property (retain, nonatomic) IBOutlet UITextField *accountTextField;
 @property (retain, nonatomic) IBOutlet UITextField *passwordTextField;

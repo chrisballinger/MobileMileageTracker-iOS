@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "ASIFormDataRequest.h"
 
 @protocol MTAPIObjectProtocol <NSObject>
 
@@ -18,5 +19,7 @@
 -(NSDictionary*) toDictionary;
 
 +(NSURL*)RESTurl;
++(ASIFormDataRequest*)requestWithFilters:(NSDictionary*)filters;
++(NSArray*)objectsWithData:(NSData*)jsonData;
 
 @end

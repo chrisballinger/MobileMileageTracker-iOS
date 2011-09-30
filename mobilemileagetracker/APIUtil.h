@@ -12,6 +12,7 @@
 
 @interface APIUtil : NSObject
 
-+(NSURL*)hostURL;
++(NSString*)hostURLString;
++(NSString*)RESTurlString;
 
 @end
