@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+#define kHostURL @"http://chrisballinger.pagekite.me/"
+
 @interface APIUtil : NSObject
 
 +(NSURL*)hostURL;

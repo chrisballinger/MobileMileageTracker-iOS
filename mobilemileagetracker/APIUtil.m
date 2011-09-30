@@ -12,7 +12,7 @@
 
 +(NSURL*)hostURL
 {
-    NSURL *url = [NSURL URLWithString:@"http://chrisballinger.pagekite.me/"];
+    NSURL *url = [NSURL URLWithString:kHostURL];
     return url;
 }
 
