@@ -97,6 +97,7 @@
 
 - (void)dealloc {
     [deviceTableView release];
+    
     [super dealloc];
 }
 
@@ -144,8 +145,6 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-
     NSDictionary *devices = [objectStore getDevices];
     MTDevice *device = nil;
     if(indexPath.row < [devices count])
@@ -156,10 +155,13 @@
     
     if(isChoosingDevice)
     {
-        NSDictionary *deviceInfo = [NSDictionary dictionaryWithObject:device forKey:@"device"];
-        [[NSNotificationCenter defaultCenter]
-         postNotificationName:@"DeviceChosenNotification"
-         object:self userInfo:deviceInfo];
+        if(!device)
+            NSLog(@"device is nil!");
+
+        NSMutableDictionary *deviceInfo = [[NSMutableDictionary alloc] initWithCapacity:1];
+        [deviceInfo setObject:device forKey:@"device"];
+            
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"DeviceChosenNotification" object:nil userInfo:deviceInfo];
         
         [self.navigationController popViewControllerAnimated:YES];
     }
@@ -170,7 +172,11 @@
         deviceDetailController.device = device;
         [self.navigationController pushViewController:deviceDetailController animated:YES];
         [deviceDetailController release];
+        
+
     }
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+
 }
 
 @end

@@ -15,4 +15,5 @@
 
 @property BOOL isChoosingDevice;
 
+
 @end

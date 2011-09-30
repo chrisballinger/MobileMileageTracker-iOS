@@ -38,11 +38,7 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    [[NSNotificationCenter defaultCenter]
-     addObserver:self
-     selector:@selector(deviceChosen:)
-     name:@"DeviceChosenNotification"
-     object:nil ];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deviceChosen:) name:@"DeviceChosenNotification" object:nil];
     
     if(trip)
     {
@@ -52,7 +48,7 @@
     else
     {
         self.title = @"New Trip";
-        trip = [MTTrip tripWithName:@"" device:nil];
+        trip = [[MTTrip tripWithName:@"" device:nil] retain];
     }
     
     nameTextField.text = trip.name;
@@ -64,10 +60,7 @@
 {
     [self setNameTextField:nil];
     [self setChooseDeviceButton:nil];
-    
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"DeviceChosenNotification" object:nil];
-    
-     [super viewDidUnload];
+    [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
 }
@@ -81,6 +74,7 @@
 - (void)dealloc {
     [nameTextField release];
     [chooseDeviceButton release];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     [super dealloc];
 }
 - (IBAction)chooseDevicePressed:(id)sender 
@@ -97,10 +91,15 @@
     [chooseDeviceButton setTitle:trip.device.name forState: UIControlStateNormal];
 }
 
+-(BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [textField resignFirstResponder];
+    return YES;
+}
     
 - (IBAction)savePressed:(id)sender
 {
-    if(!trip.device || [trip.name isEqualToString:@""])
+    if(!trip.device || [nameTextField.text isEqualToString:@""])
     {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"More Information Required" message:@"Please fill in all of the fields and try again." delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
         [alert show];
