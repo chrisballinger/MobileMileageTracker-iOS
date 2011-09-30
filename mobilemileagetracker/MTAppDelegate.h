@@ -8,8 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MTAppDelegate : UIResponder <UIApplicationDelegate>
+@interface MTAppDelegate : UIResponder <UIApplicationDelegate, UITabBarControllerDelegate>
 
-@property (strong, nonatomic) UIWindow *window;
+@property (nonatomic, retain)  UIWindow *window;
+
+@property (nonatomic, retain)  UITabBarController *tabBarController;
 
 @end
