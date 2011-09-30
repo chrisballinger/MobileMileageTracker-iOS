@@ -37,6 +37,16 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    if(device)
+    {
+        self.title = device.name;
+    }
+    else
+    {
+        self.title = @"New Device";
+        device = [[MTDevice deviceWithName:@""] retain];
+    }
+    
     nameTextField.text = device.name;
     typeTextField.text = device.deviceType;
     UUIDTextField.text = device.uuid;
@@ -89,14 +99,21 @@
 
 - (IBAction)savePressed:(id)sender 
 {
-    ASIFormDataRequest *request = [MTDevice requestWithURL:[MTDevice RESTurl] filters:nil];
-    device.name = nameTextField.text;
-    device.deviceType = typeTextField.text;
-    device.uuid = UUIDTextField.text;
-    [request appendPostData:[device toJSON]];
-    [request setDelegate:self];
-    [request startAsynchronous];
-    //[request setData:recording withFileName:[NSString stringWithFormat:@"%d.caf",unixTime] andContentType:@"audio/x-caf" forKey:@"doc_file"];
-
+    if([nameTextField.text isEqualToString:@""] || [typeTextField.text isEqualToString:@""] || [UUIDTextField.text isEqualToString:@""])
+    {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"More Information Required" message:@"Please fill in all of the fields and try again." delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
+        [alert show];
+        [alert release];
+    }
+    else
+    {
+        ASIFormDataRequest *request = [MTDevice requestWithURL:[MTDevice RESTurl] filters:nil];
+        device.name = nameTextField.text;
+        device.deviceType = typeTextField.text;
+        device.uuid = UUIDTextField.text;
+        [request appendPostData:[device toJSON]];
+        [request setDelegate:self];
+        [request startAsynchronous];
+    }
 }
 @end

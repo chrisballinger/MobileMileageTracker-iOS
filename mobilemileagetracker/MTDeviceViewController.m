@@ -106,7 +106,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [[objectStore getDevices] count];   
+    return [[objectStore getDevices] count] + 1;   
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -118,13 +118,19 @@
 	}
 	
     NSDictionary *devices = [objectStore getDevices];
-    if([devices count] > 0)
+    if(indexPath.row < [devices count])
     {
         NSArray *allDevices = [devices allValues];
         MTDevice *device = [allDevices objectAtIndex:indexPath.row];
         cell.textLabel.text = device.name;
         cell.detailTextLabel.text = device.deviceType;
     }
+    if(indexPath.row == [devices count])
+    {
+        cell.textLabel.text = @"Add New Device";
+    }
+    
+    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     
 	return cell;
 }
@@ -132,15 +138,17 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *devices = [objectStore getDevices];
-    if([devices count] > 0)
+    MTDevice *device = nil;
+    if(indexPath.row < [devices count])
     {
         NSArray *allDevices = [devices allValues];
-        MTDevice *device = [allDevices objectAtIndex:indexPath.row];
-        MTDeviceDetailViewController *deviceDetailController = [[MTDeviceDetailViewController alloc] init];
-        deviceDetailController.device = device;
-        [self.navigationController pushViewController:deviceDetailController animated:YES];
-        [deviceDetailController release];
+        device = [allDevices objectAtIndex:indexPath.row];
     }
+    MTDeviceDetailViewController *deviceDetailController = [[MTDeviceDetailViewController alloc] init];
+    deviceDetailController.device = device;
+    [self.navigationController pushViewController:deviceDetailController animated:YES];
+    [deviceDetailController release];
+
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
