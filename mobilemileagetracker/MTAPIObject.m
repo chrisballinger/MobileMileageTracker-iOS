@@ -8,7 +8,7 @@
 
 #import "MTAPIObject.h"
 #import "APIUtil.h"
-#import "JSONKit.h"
+#import <RestKit/Support/JSON/JSONKit/JSONKit.h>
 
 @implementation MTAPIObject
 

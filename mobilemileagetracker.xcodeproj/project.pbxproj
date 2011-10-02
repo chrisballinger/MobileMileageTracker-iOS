@@ -26,7 +26,6 @@
 		D9308846143571AD00EFC33F /* ASIInputStream.m in Sources */ = {isa = PBXBuildFile; fileRef = D9308833143571AD00EFC33F /* ASIInputStream.m */; };
 		D9308847143571AD00EFC33F /* ASINetworkQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = D9308835143571AD00EFC33F /* ASINetworkQueue.m */; };
 		D9308848143571AD00EFC33F /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = D9308839143571AD00EFC33F /* Reachability.m */; };
-		D9308849143571AD00EFC33F /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = D930883C143571AD00EFC33F /* JSONKit.m */; };
 		D930884A143571AD00EFC33F /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = D930883F143571AD00EFC33F /* MBProgressHUD.m */; };
 		D93088521435893A00EFC33F /* MTLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = D93088511435893A00EFC33F /* MTLocation.m */; };
 		D9308856143593FC00EFC33F /* MTAccountController.m in Sources */ = {isa = PBXBuildFile; fileRef = D9308854143593FB00EFC33F /* MTAccountController.m */; };
@@ -40,6 +39,12 @@
 		D930886A1435965600EFC33F /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D93088691435965600EFC33F /* MobileCoreServices.framework */; };
 		D930886E1435980A00EFC33F /* MTDeviceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D930886C1435980900EFC33F /* MTDeviceViewController.m */; };
 		D930886F1435980A00EFC33F /* MTDeviceViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D930886D1435980A00EFC33F /* MTDeviceViewController.xib */; };
+		D9334F1914392B2100400F82 /* libRestKitCoreData.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D9334F131439296400400F82 /* libRestKitCoreData.a */; };
+		D9334F1B14392B2100400F82 /* libRestKitNetwork.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D9334F031439296400400F82 /* libRestKitNetwork.a */; };
+		D9334F1C14392B2100400F82 /* libRestKitObjectMapping.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D9334F051439296400400F82 /* libRestKitObjectMapping.a */; };
+		D9334F1D14392B2100400F82 /* libRestKitSupport.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D9334F071439296400400F82 /* libRestKitSupport.a */; };
+		D9334F2114392B5E00400F82 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D9334F2014392B5E00400F82 /* CoreData.framework */; };
+		D9334F2614392D0600400F82 /* libRestKitJSONParserJSONKit.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D9334F0F1439296400400F82 /* libRestKitJSONParserJSONKit.a */; };
 		D98D6D6314363F2A00B3B849 /* MTDeviceDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D98D6D6114363F2A00B3B849 /* MTDeviceDetailViewController.m */; };
 		D98D6D6414363F2A00B3B849 /* MTDeviceDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D98D6D6214363F2A00B3B849 /* MTDeviceDetailViewController.xib */; };
 		D98D6D681436430A00B3B849 /* MTObjectStore.m in Sources */ = {isa = PBXBuildFile; fileRef = D98D6D671436430A00B3B849 /* MTObjectStore.m */; };
@@ -48,6 +53,93 @@
 		D98D6D7914365AF500B3B849 /* MTTripDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D98D6D7714365AF400B3B849 /* MTTripDetailViewController.m */; };
 		D98D6D7A14365AF500B3B849 /* MTTripDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D98D6D7814365AF400B3B849 /* MTTripDetailViewController.xib */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		D9334F021439296400400F82 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D9334EEE1439296300400F82 /* RestKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 253A07FC1255161B00976E89;
+			remoteInfo = RestKitNetwork;
+		};
+		D9334F041439296400400F82 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D9334EEE1439296300400F82 /* RestKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 253A08031255162C00976E89;
+			remoteInfo = RestKitObjectMapping;
+		};
+		D9334F061439296400400F82 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D9334EEE1439296300400F82 /* RestKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 253A080C12551D3000976E89;
+			remoteInfo = RestKitSupport;
+		};
+		D9334F081439296400400F82 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D9334EEE1439296300400F82 /* RestKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 20808DBD13DE8CDC000A156A;
+			remoteInfo = "RestKitJSONParser+NXJSON";
+		};
+		D9334F0A1439296400400F82 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D9334EEE1439296300400F82 /* RestKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 2590E64F125231F600531FA8;
+			remoteInfo = "RestKitJSONParser+YAJL";
+		};
+		D9334F0C1439296400400F82 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D9334EEE1439296300400F82 /* RestKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 2590E66B1252353700531FA8;
+			remoteInfo = "RestKitJSONParser+SBJSON";
+		};
+		D9334F0E1439296400400F82 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D9334EEE1439296300400F82 /* RestKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 73057FD11331AD2E001908EE;
+			remoteInfo = "RestKitJSONParser+JSONKit";
+		};
+		D9334F101439296400400F82 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D9334EEE1439296300400F82 /* RestKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 25BD43BD1340315800DBACDD;
+			remoteInfo = "RestKitXMLParser+Libxml";
+		};
+		D9334F121439296400400F82 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D9334EEE1439296300400F82 /* RestKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 253A081412551D5300976E89;
+			remoteInfo = RestKitCoreData;
+		};
+		D9334F141439296400400F82 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D9334EEE1439296300400F82 /* RestKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 2523360511E79F090048F9B4;
+			remoteInfo = RestKitThree20;
+		};
+		D9334F161439296400400F82 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D9334EEE1439296300400F82 /* RestKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 3F6C39A510FE5C95008F47C5;
+			remoteInfo = UISpec;
+		};
+		D9334F1E14392B3E00400F82 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D9334EEE1439296300400F82 /* RestKit.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 255B7588133BABBF00ED76AD;
+			remoteInfo = RestKit;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		D93087E7143567BA00EFC33F /* mobilemileagetracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = mobilemileagetracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -91,8 +183,6 @@
 		D9308836143571AD00EFC33F /* ASIProgressDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIProgressDelegate.h; sourceTree = "<group>"; };
 		D9308838143571AD00EFC33F /* Reachability.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reachability.h; sourceTree = "<group>"; };
 		D9308839143571AD00EFC33F /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
-		D930883B143571AD00EFC33F /* JSONKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONKit.h; sourceTree = "<group>"; };
-		D930883C143571AD00EFC33F /* JSONKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSONKit.m; sourceTree = "<group>"; };
 		D930883E143571AD00EFC33F /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
 		D930883F143571AD00EFC33F /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
 		D93088501435893A00EFC33F /* MTLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTLocation.h; sourceTree = "<group>"; };
@@ -111,6 +201,8 @@
 		D930886B1435980900EFC33F /* MTDeviceViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDeviceViewController.h; sourceTree = "<group>"; };
 		D930886C1435980900EFC33F /* MTDeviceViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDeviceViewController.m; sourceTree = "<group>"; };
 		D930886D1435980A00EFC33F /* MTDeviceViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MTDeviceViewController.xib; sourceTree = "<group>"; };
+		D9334EEE1439296300400F82 /* RestKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RestKit.xcodeproj; path = RestKit/RestKit.xcodeproj; sourceTree = "<group>"; };
+		D9334F2014392B5E00400F82 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		D98D6D6014363F2A00B3B849 /* MTDeviceDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTDeviceDetailViewController.h; sourceTree = "<group>"; };
 		D98D6D6114363F2A00B3B849 /* MTDeviceDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTDeviceDetailViewController.m; sourceTree = "<group>"; };
 		D98D6D6214363F2A00B3B849 /* MTDeviceDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MTDeviceDetailViewController.xib; sourceTree = "<group>"; };
@@ -129,6 +221,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D9334F2614392D0600400F82 /* libRestKitJSONParserJSONKit.a in Frameworks */,
+				D9334F2114392B5E00400F82 /* CoreData.framework in Frameworks */,
+				D9334F1914392B2100400F82 /* libRestKitCoreData.a in Frameworks */,
+				D9334F1B14392B2100400F82 /* libRestKitNetwork.a in Frameworks */,
+				D9334F1C14392B2100400F82 /* libRestKitObjectMapping.a in Frameworks */,
+				D9334F1D14392B2100400F82 /* libRestKitSupport.a in Frameworks */,
 				D930886A1435965600EFC33F /* MobileCoreServices.framework in Frameworks */,
 				D93088681435964700EFC33F /* CoreLocation.framework in Frameworks */,
 				D93088661435964100EFC33F /* SystemConfiguration.framework in Frameworks */,
@@ -146,6 +244,7 @@
 		D93087DC143567BA00EFC33F = {
 			isa = PBXGroup;
 			children = (
+				D9334F2014392B5E00400F82 /* CoreData.framework */,
 				D93087F1143567BA00EFC33F /* mobilemileagetracker */,
 				D930884B143571B300EFC33F /* 3rd Party Frameworks */,
 				D93087EA143567BA00EFC33F /* Frameworks */,
@@ -273,15 +372,6 @@
 			path = Reachability;
 			sourceTree = "<group>";
 		};
-		D930883A143571AD00EFC33F /* JSONKit */ = {
-			isa = PBXGroup;
-			children = (
-				D930883B143571AD00EFC33F /* JSONKit.h */,
-				D930883C143571AD00EFC33F /* JSONKit.m */,
-			);
-			path = JSONKit;
-			sourceTree = "<group>";
-		};
 		D930883D143571AD00EFC33F /* MBProgressHUD */ = {
 			isa = PBXGroup;
 			children = (
@@ -294,11 +384,29 @@
 		D930884B143571B300EFC33F /* 3rd Party Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D9334EEE1439296300400F82 /* RestKit.xcodeproj */,
 				D9308822143571AD00EFC33F /* ASIHTTPRequest */,
-				D930883A143571AD00EFC33F /* JSONKit */,
 				D930883D143571AD00EFC33F /* MBProgressHUD */,
 			);
 			name = "3rd Party Frameworks";
+			sourceTree = "<group>";
+		};
+		D9334EEF1439296300400F82 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D9334F031439296400400F82 /* libRestKitNetwork.a */,
+				D9334F051439296400400F82 /* libRestKitObjectMapping.a */,
+				D9334F071439296400400F82 /* libRestKitSupport.a */,
+				D9334F091439296400400F82 /* libRestKitJSONParser+NXJSON.a */,
+				D9334F0B1439296400400F82 /* libRestKitJSONParserYAJL.a */,
+				D9334F0D1439296400400F82 /* libRestKitJSONParserSBJSON.a */,
+				D9334F0F1439296400400F82 /* libRestKitJSONParserJSONKit.a */,
+				D9334F111439296400400F82 /* libRestKitXMLParserLibxml.a */,
+				D9334F131439296400400F82 /* libRestKitCoreData.a */,
+				D9334F151439296400400F82 /* libRestKitThree20.a */,
+				D9334F171439296400400F82 /* UISpec.app */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -315,6 +423,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				D9334F1F14392B3E00400F82 /* PBXTargetDependency */,
 			);
 			name = mobilemileagetracker;
 			productName = mobilemileagetracker;
@@ -339,12 +448,99 @@
 			mainGroup = D93087DC143567BA00EFC33F;
 			productRefGroup = D93087E8143567BA00EFC33F /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = D9334EEF1439296300400F82 /* Products */;
+					ProjectRef = D9334EEE1439296300400F82 /* RestKit.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				D93087E6143567BA00EFC33F /* mobilemileagetracker */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		D9334F031439296400400F82 /* libRestKitNetwork.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRestKitNetwork.a;
+			remoteRef = D9334F021439296400400F82 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D9334F051439296400400F82 /* libRestKitObjectMapping.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRestKitObjectMapping.a;
+			remoteRef = D9334F041439296400400F82 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D9334F071439296400400F82 /* libRestKitSupport.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRestKitSupport.a;
+			remoteRef = D9334F061439296400400F82 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D9334F091439296400400F82 /* libRestKitJSONParser+NXJSON.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			name = "libRestKitJSONParser+NXJSON.a";
+			path = libRestKitJSONParserNXJSON.a;
+			remoteRef = D9334F081439296400400F82 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D9334F0B1439296400400F82 /* libRestKitJSONParserYAJL.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRestKitJSONParserYAJL.a;
+			remoteRef = D9334F0A1439296400400F82 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D9334F0D1439296400400F82 /* libRestKitJSONParserSBJSON.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRestKitJSONParserSBJSON.a;
+			remoteRef = D9334F0C1439296400400F82 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D9334F0F1439296400400F82 /* libRestKitJSONParserJSONKit.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRestKitJSONParserJSONKit.a;
+			remoteRef = D9334F0E1439296400400F82 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D9334F111439296400400F82 /* libRestKitXMLParserLibxml.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRestKitXMLParserLibxml.a;
+			remoteRef = D9334F101439296400400F82 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D9334F131439296400400F82 /* libRestKitCoreData.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRestKitCoreData.a;
+			remoteRef = D9334F121439296400400F82 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D9334F151439296400400F82 /* libRestKitThree20.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRestKitThree20.a;
+			remoteRef = D9334F141439296400400F82 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		D9334F171439296400400F82 /* UISpec.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = UISpec.app;
+			remoteRef = D9334F161439296400400F82 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		D93087E5143567BA00EFC33F /* Resources */ = {
@@ -383,7 +579,6 @@
 				D9308846143571AD00EFC33F /* ASIInputStream.m in Sources */,
 				D9308847143571AD00EFC33F /* ASINetworkQueue.m in Sources */,
 				D9308848143571AD00EFC33F /* Reachability.m in Sources */,
-				D9308849143571AD00EFC33F /* JSONKit.m in Sources */,
 				D930884A143571AD00EFC33F /* MBProgressHUD.m in Sources */,
 				D93088521435893A00EFC33F /* MTLocation.m in Sources */,
 				D9308856143593FC00EFC33F /* MTAccountController.m in Sources */,
@@ -397,6 +592,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		D9334F1F14392B3E00400F82 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = RestKit;
+			targetProxy = D9334F1E14392B3E00400F82 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		D93087F4143567BA00EFC33F /* InfoPlist.strings */ = {
@@ -456,10 +659,16 @@
 		D9308800143567BA00EFC33F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "$(SOURCE_ROOT)/RestKit/Build";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "mobilemileagetracker/mobilemileagetracker-Prefix.pch";
+				HEADER_SEARCH_PATHS = "$(SOURCE_ROOT)/RestKit/Build";
 				INFOPLIST_FILE = "mobilemileagetracker/mobilemileagetracker-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				OTHER_LDFLAGS = (
+					"-all_load",
+					"-ObjC",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -468,10 +677,16 @@
 		D9308801143567BA00EFC33F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = "$(SOURCE_ROOT)/RestKit/Build";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "mobilemileagetracker/mobilemileagetracker-Prefix.pch";
+				HEADER_SEARCH_PATHS = "$(SOURCE_ROOT)/RestKit/Build";
 				INFOPLIST_FILE = "mobilemileagetracker/mobilemileagetracker-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
+				OTHER_LDFLAGS = (
+					"-all_load",
+					"-ObjC",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};

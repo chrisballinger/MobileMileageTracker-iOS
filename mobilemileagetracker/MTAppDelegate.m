@@ -11,6 +11,9 @@
 #import "MTLocationTrackerController.h"
 #import "MTTripViewController.h"
 
+#import <RestKit/RestKit.h>  
+#import <RestKit/CoreData/CoreData.h>// If you are using Core Data…  
+
 @implementation MTAppDelegate
 
 @synthesize window = _window;
