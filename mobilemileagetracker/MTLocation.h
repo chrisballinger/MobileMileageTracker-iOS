@@ -8,6 +8,7 @@
 
 #import "MTAPIObject.h"
 #import <CoreLocation/CoreLocation.h>
+#import "MTTrip.h"
 
 /*
  latitude = models.FloatField()
@@ -35,8 +36,11 @@
     
 }
 
+-(id)initWithLocation:(CLLocation*)theLocation trip:(MTTrip*)theTrip;
++(MTLocation*)locationWithLocation:(CLLocation*)theLocation trip:(MTTrip*)theTrip;
+
 @property (readonly, retain) CLLocation *location;
-@property (readonly, retain) NSString* tripURI;
+@property (readonly, retain) MTTrip *trip;
 
 
 @end

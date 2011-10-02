@@ -38,10 +38,8 @@
     {
         name = newName;
         deviceType = @"iPhone";
-        CFUUIDRef theUUID = CFUUIDCreate(NULL);
-        CFStringRef string = CFUUIDCreateString(NULL, theUUID);
-        CFRelease(theUUID);
-        uuid = (NSString *)string;
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        uuid = [defaults objectForKey:@"uuid"];
     }
     return self;
 }
