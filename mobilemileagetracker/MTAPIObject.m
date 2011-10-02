@@ -12,7 +12,7 @@
 
 @implementation MTAPIObject
 
-@synthesize _id;
+@synthesize resourceID;
 @synthesize limit;
 @synthesize next;
 @synthesize previous;
@@ -27,12 +27,12 @@
     self = [super init];
     if(self)
     {
-        _id = nil;
-        limit = -1;
+        resourceID = nil;
+        limit = nil;
         next = nil;
         previous = nil;
-        offset = -1;
-        totalCount = -1;
+        offset = nil;
+        totalCount = nil;
         resourceURI = nil;
         user = nil;
         objects = nil;
@@ -66,9 +66,9 @@
     NSDictionary *meta = [fields objectForKey:kMetadataKey];
     if(meta)
     {
-        limit = [[meta objectForKey:kMetaLimitKey] intValue];
-        offset = [[meta objectForKey:kMetaOffsetKey] intValue];
-        totalCount = [[meta objectForKey:kMetaTotalCountKey] intValue];
+        limit = [[meta objectForKey:kMetaLimitKey] retain];
+        offset = [[meta objectForKey:kMetaOffsetKey] retain];
+        totalCount = [[meta objectForKey:kMetaTotalCountKey] retain];
         
         next = [[meta objectForKey:kMetaNextKey] retain];
         previous = [[meta objectForKey:kMetaPreviousKey] retain];
@@ -76,7 +76,7 @@
     objects = [fields objectForKey:kObjectsKey];
     if(!objects)
     {
-        _id = [[fields objectForKey:kIDKey] retain];
+        resourceID = [[fields objectForKey:kIDKey] retain];
         resourceURI = [[fields objectForKey:kResourceURIKey] retain];
         user = [[fields objectForKey:kUserKey] retain];
     }

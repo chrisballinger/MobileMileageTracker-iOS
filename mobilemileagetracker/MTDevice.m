@@ -61,7 +61,7 @@
     name = [[fields objectForKey:kDeviceNameKey] retain];
     deviceType = [[fields objectForKey:kDeviceTypeKey] retain];
     uuid = [[fields objectForKey:kDeviceUUIDKey] retain];
-    super._id = [[fields objectForKey:kIDKey] retain];
+    super.resourceID = [[fields objectForKey:kIDKey] retain];
 }
 
 -(NSDictionary*)toDictionary
@@ -72,9 +72,9 @@
     NSMutableArray *objectArray = [NSMutableArray arrayWithObjects:deviceType, name, uuid, nil];
     NSMutableArray *keyArray = [NSMutableArray arrayWithObjects:kDeviceTypeKey, kDeviceNameKey, kDeviceUUIDKey, nil];
     
-    if(super._id)
+    if(super.resourceID)
     {
-        [objectArray addObject:super._id];
+        [objectArray addObject:super.resourceID];
         [keyArray addObject:kIDKey];
     }
     
@@ -100,11 +100,11 @@
     
     if(apiObject.totalCount > 0)
     {
-        NSMutableArray *devicesArray = [[NSMutableArray alloc] initWithCapacity:apiObject.totalCount];
+        NSMutableArray *devicesArray = [[NSMutableArray alloc] initWithCapacity:[apiObject.totalCount intValue]];
         
         NSArray *rawDevicesArray = apiObject.objects;
         
-        for(int i = 0; i < apiObject.totalCount; i++)
+        for(int i = 0; i < [apiObject.totalCount intValue]; i++)
         {
             NSDictionary *rawDevice = [rawDevicesArray objectAtIndex:i];
             MTDevice *device = [[MTDevice alloc] initWithDictionary:rawDevice];

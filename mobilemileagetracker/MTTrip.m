@@ -60,7 +60,7 @@
     MTObjectStore *objectStore = [MTObjectStore sharedInstance];
     device = (MTDevice*)[objectStore getObjectForURI:deviceURI];
     
-    super._id = [[fields objectForKey:kIDKey] retain];
+    super.resourceID = [[fields objectForKey:kIDKey] retain];
 
 }
 
@@ -72,9 +72,9 @@
     NSMutableArray *objectArray = [NSMutableArray arrayWithObjects:name, device.resourceURI, nil];
     NSMutableArray *keyArray = [NSMutableArray arrayWithObjects:kTripNameKey, kTripDeviceKey, nil];
     
-    if(super._id)
+    if(super.resourceID)
     {
-        [objectArray addObject:super._id];
+        [objectArray addObject:super.resourceID];
         [keyArray addObject:kIDKey];
     }
     
@@ -99,11 +99,11 @@
     
     if(apiObject.totalCount > 0)
     {
-        NSMutableArray *devicesArray = [[NSMutableArray alloc] initWithCapacity:apiObject.totalCount];
+        NSMutableArray *devicesArray = [[NSMutableArray alloc] initWithCapacity:[apiObject.totalCount intValue]];
         
         NSArray *rawDevicesArray = apiObject.objects;
         
-        for(int i = 0; i < apiObject.totalCount; i++)
+        for(int i = 0; i < [apiObject.totalCount intValue]; i++)
         {
             NSDictionary *rawDevice = [rawDevicesArray objectAtIndex:i];
             MTTrip *trip = [[MTTrip alloc] initWithDictionary:rawDevice];

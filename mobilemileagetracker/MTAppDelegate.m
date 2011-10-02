@@ -12,7 +12,8 @@
 #import "MTTripViewController.h"
 
 #import <RestKit/RestKit.h>  
-#import <RestKit/CoreData/CoreData.h>// If you are using Core Data…  
+#import <RestKit/CoreData/CoreData.h>// If you are using Core Data… 
+#import "APIUtil.h"
 
 @implementation MTAppDelegate
 
@@ -39,6 +40,9 @@
         [defaults synchronize];
     }
     
+    RKClient* client = [RKClient clientWithBaseURL:[APIUtil RESTurlString]];
+    if(!client)
+        NSLog(@"RestKit client failed to initialize!");
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.

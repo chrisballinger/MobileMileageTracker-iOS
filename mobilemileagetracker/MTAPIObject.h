@@ -26,16 +26,16 @@
 {
 }
 
-@property (readonly) int limit;
-@property (readonly, retain) NSString *next;
-@property (readonly, retain) NSString *previous;
-@property (readonly) int offset;
-@property (readonly) int totalCount;
+@property (nonatomic, retain) NSNumber *limit;
+@property (nonatomic, retain) NSString *next;
+@property (nonatomic, retain) NSString *previous;
+@property (nonatomic, retain) NSNumber *offset;
+@property (nonatomic, retain) NSNumber *totalCount;
 
-@property (nonatomic, retain) NSString *_id;
-@property (readonly, retain) NSString *resourceURI;
-@property (readonly, retain) NSString *user;
-@property (readonly, retain) NSArray *objects;
+@property (nonatomic, retain) NSString *resourceID;
+@property (nonatomic, retain) NSString *resourceURI;
+@property (nonatomic, retain) NSString *user;
+@property (nonatomic, retain) NSArray *objects;
 
 
 /*
