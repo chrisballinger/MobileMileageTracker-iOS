@@ -116,6 +116,16 @@
     return nil;
 }
 
-
++ (NSDictionary*)elementToPropertyMappings {  
+    NSMutableDictionary *parent = [NSMutableDictionary dictionaryWithDictionary:[super elementToPropertyMappings]];
+    NSDictionary *deviceDictionary = [NSDictionary dictionaryWithKeysAndObjects:  
+            kDeviceNameKey, @"name",  
+            kDeviceTypeKey, @"deviceType",  
+            kDeviceUUIDKey, @"uuid",  
+            nil];
+    [parent addEntriesFromDictionary:deviceDictionary];
+    
+    return parent;
+} 
 
 @end

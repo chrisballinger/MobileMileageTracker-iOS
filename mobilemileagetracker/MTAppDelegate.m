@@ -40,7 +40,8 @@
         [defaults synchronize];
     }
     
-    RKClient* client = [RKClient clientWithBaseURL:[APIUtil RESTurlString]];
+    
+    RKClient* client = [RKClient clientWithBaseURL:[APIUtil RESTurlString] username:[defaults objectForKey:@"username"] password:[defaults objectForKey:@"password"]];
     if(!client)
         NSLog(@"RestKit client failed to initialize!");
     

@@ -137,4 +137,12 @@
     return nil;
 }
 
++ (NSDictionary*)elementToPropertyMappings {  
+    return [NSDictionary dictionaryWithKeysAndObjects:  
+            kIDKey, @"resourceID",  
+            kUserKey, @"user",  
+            kResourceURIKey, @"resourceURI",  
+            nil];  
+}  
+
 @end

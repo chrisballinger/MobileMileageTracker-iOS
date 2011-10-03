@@ -7,6 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <RestKit/RestKit.h>  
+#import <RestKit/CoreData/CoreData.h>// If you are using Core Data… 
 #import "MTAPIObjectProtocol.h"
 
 #define kMetadataKey @"meta"
@@ -41,6 +43,6 @@
 /*
  "meta": {"limit": 20, "next": null, "offset": 0, "previous": null, "total_count": 1},
  */
-
++ (NSDictionary*)elementToPropertyMappings;
 
 @end

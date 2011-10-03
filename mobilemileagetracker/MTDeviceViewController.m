@@ -11,6 +11,7 @@
 #import "ASIHTTPRequest.h"
 #import "MTDevice.h"
 #import "MTDeviceDetailViewController.h"
+#import "APIUtil.h"
 
 @implementation MTDeviceViewController
 @synthesize deviceTableView;
@@ -58,12 +59,46 @@
     }
     else
     {
+        RKObjectManager* manager = [RKObjectManager objectManagerWithBaseURL:[APIUtil RESTurlString]];  
         
-        ASIFormDataRequest *request = [MTAPIObject requestWithURL:[MTDevice RESTurl] filters:nil];
+        manager.client.username = [defaults objectForKey:@"username"];
+        manager.client.password = [defaults objectForKey:@"password"];
+        manager.client.forceBasicAuthentication = YES;
+
+        //[manager loadObjectsAtResourcePath:@"/devices/?limit=0" objectClass:[MTDevice class] delegate:self];
+        
+        RKObjectMapping* articleMapping = [RKObjectMapping mappingForClass:[MTDevice class]];
+        [articleMapping mapKeyPath:kIDKey toAttribute:@"resourceID"];
+        [articleMapping mapKeyPath:kResourceURIKey toAttribute:@"resourceURI"];
+        [articleMapping mapKeyPath:kUserKey toAttribute:@"user"];
+        [articleMapping mapKeyPath:kDeviceNameKey toAttribute:@"name"];
+        [articleMapping mapKeyPath:kDeviceTypeKey toAttribute:@"deviceType"];
+        [articleMapping mapKeyPath:kDeviceUUIDKey toAttribute:@"uuid"];
+        
+        [[RKObjectManager sharedManager].mappingProvider setMapping:articleMapping forKeyPath:@"objects"];
+
+        
+        [manager loadObjectsAtResourcePath:@"device/?limit=0" delegate:self];
+        
+        /*ASIFormDataRequest *request = [MTAPIObject requestWithURL:[MTDevice RESTurl] filters:nil];
         [request setDelegate:self];
-        [request startAsynchronous];
+        [request startAsynchronous];*/
     }
 }
+
+- (void)objectLoader:(RKObjectLoader*)objectLoader didLoadObjects:(NSArray*)objects {  
+    [objectStore addObjects:objects];  
+    [deviceTableView reloadData];
+    NSLog(@"Added objects to objectstore");  
+    for(MTDevice *device in objects)
+    {
+        NSLog(@"added %@",device.name);
+    }
+}  
+
+- (void)objectLoader:(RKObjectLoader*)objectLoader didFailWithError:(NSError*)error {  
+    NSLog(@"Encountered an error: %@", error);  
+}  
 
 - (void)requestFinished:(ASIFormDataRequest *)request
 {
