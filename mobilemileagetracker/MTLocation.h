@@ -36,11 +36,14 @@
     
 }
 
--(id)initWithLocation:(CLLocation*)theLocation trip:(MTTrip*)theTrip;
-+(MTLocation*)locationWithLocation:(CLLocation*)theLocation trip:(MTTrip*)theTrip;
+@property (nonatomic, retain) NSNumber *latitude;
+@property (nonatomic, retain) NSNumber *longitude;
+@property (nonatomic, retain) NSDate *timestamp;
+@property (nonatomic, retain) NSNumber *altitude;
+@property (nonatomic, retain) NSNumber *verticalAccuracy;
+@property (nonatomic, retain) NSNumber *horizontalAccuracy;
+@property (nonatomic, retain) MTTrip *trip;
 
-@property (readonly, retain) CLLocation *location;
-@property (readonly, retain) MTTrip *trip;
-
+-(CLLocation*)location;
 
 @end

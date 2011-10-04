@@ -13,6 +13,7 @@
 #define kDeviceUUIDKey @"uuid"
 
 #define kAPIURLDeviceSuffix @"device/"
+#define kAPIDeviceResourcePath @"device/?limit=0"
 
 /*
  name = models.CharField(max_length=60)

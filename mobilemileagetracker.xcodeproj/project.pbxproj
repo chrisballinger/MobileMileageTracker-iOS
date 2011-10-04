@@ -52,6 +52,8 @@
 		D98D6D751436593D00B3B849 /* MTTripViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D98D6D731436593D00B3B849 /* MTTripViewController.xib */; };
 		D98D6D7914365AF500B3B849 /* MTTripDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D98D6D7714365AF400B3B849 /* MTTripDetailViewController.m */; };
 		D98D6D7A14365AF500B3B849 /* MTTripDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D98D6D7814365AF400B3B849 /* MTTripDetailViewController.xib */; };
+		D9E84E4A143BB88C00D6EDA2 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D9E84E48143BB88B00D6EDA2 /* Model.xcdatamodeld */; };
+		D9E84E52143BC64200D6EDA2 /* MTObjectCache.m in Sources */ = {isa = PBXBuildFile; fileRef = D9E84E51143BC64100D6EDA2 /* MTObjectCache.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -214,6 +216,9 @@
 		D98D6D7614365AF400B3B849 /* MTTripDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTTripDetailViewController.h; sourceTree = "<group>"; };
 		D98D6D7714365AF400B3B849 /* MTTripDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTTripDetailViewController.m; sourceTree = "<group>"; };
 		D98D6D7814365AF400B3B849 /* MTTripDetailViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MTTripDetailViewController.xib; sourceTree = "<group>"; };
+		D9E84E49143BB88C00D6EDA2 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
+		D9E84E50143BC64100D6EDA2 /* MTObjectCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTObjectCache.h; sourceTree = "<group>"; };
+		D9E84E51143BC64100D6EDA2 /* MTObjectCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTObjectCache.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -320,6 +325,8 @@
 			children = (
 				D98D6D661436430A00B3B849 /* MTObjectStore.h */,
 				D98D6D671436430A00B3B849 /* MTObjectStore.m */,
+				D9E84E50143BC64100D6EDA2 /* MTObjectCache.h */,
+				D9E84E51143BC64100D6EDA2 /* MTObjectCache.m */,
 				D930880E14356C1A00EFC33F /* MTAPIObjectProtocol.h */,
 				D930881F1435703B00EFC33F /* MTAPIObject.h */,
 				D93088201435703C00EFC33F /* MTAPIObject.m */,
@@ -331,6 +338,7 @@
 				D930881014356D3000EFC33F /* MTDevice.m */,
 				D9308806143569B600EFC33F /* APIUtil.h */,
 				D9308807143569B600EFC33F /* APIUtil.m */,
+				D9E84E48143BB88B00D6EDA2 /* Model.xcdatamodeld */,
 			);
 			name = API;
 			sourceTree = "<group>";
@@ -588,6 +596,8 @@
 				D98D6D681436430A00B3B849 /* MTObjectStore.m in Sources */,
 				D98D6D741436593D00B3B849 /* MTTripViewController.m in Sources */,
 				D98D6D7914365AF500B3B849 /* MTTripDetailViewController.m in Sources */,
+				D9E84E4A143BB88C00D6EDA2 /* Model.xcdatamodeld in Sources */,
+				D9E84E52143BC64200D6EDA2 /* MTObjectCache.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -714,6 +724,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		D9E84E48143BB88B00D6EDA2 /* Model.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				D9E84E49143BB88C00D6EDA2 /* Model.xcdatamodel */,
+			);
+			currentVersion = D9E84E49143BB88C00D6EDA2 /* Model.xcdatamodel */;
+			path = Model.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = D93087DE143567BA00EFC33F /* Project object */;
 }

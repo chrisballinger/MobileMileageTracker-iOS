@@ -60,7 +60,8 @@
     else
     {
         
-        [MTDevice loadObjectsWithDelegate:self];
+        [self objectLoader:nil didLoadObjects:[MTDevice cachedObjects]];
+        //[MTDevice loadObjectsWithDelegate:self];
         
         
         /*ASIFormDataRequest *request = [MTAPIObject requestWithURL:[MTDevice RESTurl] filters:nil];
@@ -82,22 +83,6 @@
 - (void)objectLoader:(RKObjectLoader*)objectLoader didFailWithError:(NSError*)error {  
     NSLog(@"Encountered an error: %@", error);  
 }  
-
-- (void)requestFinished:(ASIFormDataRequest *)request
-{
-    [objectStore addObjects:[MTDevice objectsWithData:[request responseData]]];
-    NSLog(@"HTTP code %d:\n%@", [request responseStatusCode], [request responseString]);
-    [deviceTableView reloadData];
-}
-
-- (void)requestFailed:(ASIFormDataRequest *)request
-{
-    NSError *error = [request error];
-    NSLog(@"%@",error);
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Network Error" message:@"A network error has occurred. Please try again later." delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
-    [alert show];
-    [alert release];
-}
 
 - (void)viewDidUnload
 {

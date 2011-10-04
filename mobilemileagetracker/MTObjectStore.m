@@ -11,6 +11,7 @@
 #import "MTDevice.h"
 #import "MTLocation.h"
 #import "APIUtil.h"
+#import "MTObjectCache.h"
 
 static MTObjectStore *sharedStore = nil;
 
@@ -31,9 +32,20 @@ static MTObjectStore *sharedStore = nil;
         objectManager = [RKObjectManager objectManagerWithBaseURL:[APIUtil RESTurlString]];  
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         
+        RKLogConfigureByName("RestKit/Network", RKLogLevelCritical);
+        RKLogConfigureByName("RestKit/ObjectMapping", RKLogLevelWarning);
+        RKLogConfigureByName("RestKit/CoreData", RKLogLevelDebug);
+        
         objectManager.client.username = [defaults objectForKey:@"username"];
         objectManager.client.password = [defaults objectForKey:@"password"];
         objectManager.client.forceBasicAuthentication = YES;
+
+        
+        objectManager.objectStore = [RKManagedObjectStore objectStoreWithStoreFilename:@"MTObjectStore.sqlite"];
+        [RKObjectManager setSharedManager:objectManager];
+
+        MTObjectCache *objectCache = [[MTObjectCache alloc] init];
+        objectManager.objectStore.managedObjectCache = objectCache;
     }
     return self;
 }

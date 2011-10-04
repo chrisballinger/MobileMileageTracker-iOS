@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="870" systemVersion="11B26" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="MTAPIObject" representedClassName="MTAPIObject" syncable="YES">
+        <attribute name="resourceID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="resourceURI" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="user" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="MTDevice" representedClassName="MTDevice" parentEntity="MTAPIObject" syncable="YES">
+        <attribute name="deviceType" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="uuid" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="trip" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="MTTrip" inverseName="device" inverseEntity="MTTrip" syncable="YES"/>
+    </entity>
+    <entity name="MTLocation" representedClassName="MTLocation" parentEntity="MTAPIObject" syncable="YES">
+        <attribute name="altitude" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="horizontalAccuracy" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="latitude" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="longitude" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="verticalAccuracy" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <relationship name="trip" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="MTTrip" inverseName="location" inverseEntity="MTTrip" syncable="YES"/>
+    </entity>
+    <entity name="MTTrip" representedClassName="MTTrip" parentEntity="MTAPIObject" syncable="YES">
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="device" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="MTDevice" inverseName="trip" inverseEntity="MTDevice" syncable="YES"/>
+        <relationship name="location" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="MTLocation" inverseName="trip" inverseEntity="MTLocation" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="MTAPIObject" positionX="-1269" positionY="27" width="117" height="90"/>
+        <element name="MTDevice" positionX="-983" positionY="-45" width="128" height="105"/>
+        <element name="MTLocation" positionX="-1197" positionY="288" width="128" height="150"/>
+        <element name="MTTrip" positionX="-974" positionY="168" width="128" height="90"/>
+    </elements>
+</model>

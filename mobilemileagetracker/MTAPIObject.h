@@ -24,25 +24,12 @@
 #define kUserKey @"user"
 
 
-@interface MTAPIObject : NSObject <MTAPIObjectProtocol>
+@interface MTAPIObject : NSManagedObject <MTAPIObjectProtocol>
 {
 }
-
-@property (nonatomic, retain) NSNumber *limit;
-@property (nonatomic, retain) NSString *next;
-@property (nonatomic, retain) NSString *previous;
-@property (nonatomic, retain) NSNumber *offset;
-@property (nonatomic, retain) NSNumber *totalCount;
 
 @property (nonatomic, retain) NSString *resourceID;
 @property (nonatomic, retain) NSString *resourceURI;
 @property (nonatomic, retain) NSString *user;
-@property (nonatomic, retain) NSArray *objects;
-
-
-/*
- "meta": {"limit": 20, "next": null, "offset": 0, "previous": null, "total_count": 1},
- */
-+ (NSDictionary*)elementToPropertyMappings;
 
 @end
