@@ -8,6 +8,7 @@
 
 #import "MTDevice.h"
 #import "APIUtil.h"
+#import "MTObjectStore.h"
 
 @implementation MTDevice
 
@@ -127,5 +128,22 @@
     
     return parent;
 } 
+
++(void)loadObjectsWithDelegate:(id<RKObjectLoaderDelegate>)delegate;
+{
+    MTObjectStore *objectStore = [MTObjectStore sharedInstance];
+    RKObjectMapping* articleMapping = [RKObjectMapping mappingForClass:[MTDevice class]];
+    [articleMapping mapKeyPath:kIDKey toAttribute:@"resourceID"];
+    [articleMapping mapKeyPath:kResourceURIKey toAttribute:@"resourceURI"];
+    [articleMapping mapKeyPath:kUserKey toAttribute:@"user"];
+    [articleMapping mapKeyPath:kDeviceNameKey toAttribute:@"name"];
+    [articleMapping mapKeyPath:kDeviceTypeKey toAttribute:@"deviceType"];
+    [articleMapping mapKeyPath:kDeviceUUIDKey toAttribute:@"uuid"];
+    
+    [objectStore.objectManager.mappingProvider setMapping:articleMapping forKeyPath:@"objects"];
+    
+    
+    [objectStore.objectManager loadObjectsAtResourcePath:@"device/?limit=0" delegate:delegate];
+}
 
 @end

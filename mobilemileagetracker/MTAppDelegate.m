@@ -41,9 +41,9 @@
     }
     
     
-    RKClient* client = [RKClient clientWithBaseURL:[APIUtil RESTurlString] username:[defaults objectForKey:@"username"] password:[defaults objectForKey:@"password"]];
+    /*RKClient* client = [RKClient clientWithBaseURL:[APIUtil RESTurlString] username:[defaults objectForKey:@"username"] password:[defaults objectForKey:@"password"]];
     if(!client)
-        NSLog(@"RestKit client failed to initialize!");
+        NSLog(@"RestKit client failed to initialize!");*/
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     // Override point for customization after application launch.

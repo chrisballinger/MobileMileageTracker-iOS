@@ -145,4 +145,10 @@
             nil];  
 }  
 
+
++(void)loadObjectsWithDelegate:(id<RKObjectLoaderDelegate>)delegate;
+{
+    
+}
+
 @end

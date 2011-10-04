@@ -10,11 +10,14 @@
 #import "MTTrip.h"
 #import "MTDevice.h"
 #import "MTLocation.h"
+#import "APIUtil.h"
 
 static MTObjectStore *sharedStore = nil;
 
 
 @implementation MTObjectStore
+
+@synthesize objectManager;
 
 -(id)init
 {
@@ -25,6 +28,12 @@ static MTObjectStore *sharedStore = nil;
         tripStore = [[NSMutableDictionary alloc] init];
         locationStore = [[NSMutableDictionary alloc] init];
         objectStore = [[NSMutableDictionary alloc] init];
+        objectManager = [RKObjectManager objectManagerWithBaseURL:[APIUtil RESTurlString]];  
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        
+        objectManager.client.username = [defaults objectForKey:@"username"];
+        objectManager.client.password = [defaults objectForKey:@"password"];
+        objectManager.client.forceBasicAuthentication = YES;
     }
     return self;
 }

@@ -59,26 +59,9 @@
     }
     else
     {
-        RKObjectManager* manager = [RKObjectManager objectManagerWithBaseURL:[APIUtil RESTurlString]];  
         
-        manager.client.username = [defaults objectForKey:@"username"];
-        manager.client.password = [defaults objectForKey:@"password"];
-        manager.client.forceBasicAuthentication = YES;
-
-        //[manager loadObjectsAtResourcePath:@"/devices/?limit=0" objectClass:[MTDevice class] delegate:self];
+        [MTDevice loadObjectsWithDelegate:self];
         
-        RKObjectMapping* articleMapping = [RKObjectMapping mappingForClass:[MTDevice class]];
-        [articleMapping mapKeyPath:kIDKey toAttribute:@"resourceID"];
-        [articleMapping mapKeyPath:kResourceURIKey toAttribute:@"resourceURI"];
-        [articleMapping mapKeyPath:kUserKey toAttribute:@"user"];
-        [articleMapping mapKeyPath:kDeviceNameKey toAttribute:@"name"];
-        [articleMapping mapKeyPath:kDeviceTypeKey toAttribute:@"deviceType"];
-        [articleMapping mapKeyPath:kDeviceUUIDKey toAttribute:@"uuid"];
-        
-        [[RKObjectManager sharedManager].mappingProvider setMapping:articleMapping forKeyPath:@"objects"];
-
-        
-        [manager loadObjectsAtResourcePath:@"device/?limit=0" delegate:self];
         
         /*ASIFormDataRequest *request = [MTAPIObject requestWithURL:[MTDevice RESTurl] filters:nil];
         [request setDelegate:self];

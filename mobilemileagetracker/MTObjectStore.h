@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <RestKit/RestKit.h>
 #import "MTAPIObject.h"
 
 
@@ -16,6 +17,7 @@
     NSMutableDictionary *tripStore;
     NSMutableDictionary *locationStore;
     NSMutableDictionary *objectStore;
+    RKObjectManager *objectManager;
 }
 
 + (MTObjectStore*)sharedInstance; // Singleton method
@@ -29,5 +31,8 @@
 -(NSDictionary*)getTrips;
 -(NSDictionary*)getLocations;
 -(NSDictionary*)getObjects;
+
+@property (nonatomic, retain) RKObjectManager *objectManager;
+
 
 @end

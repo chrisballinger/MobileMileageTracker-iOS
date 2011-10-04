@@ -22,4 +22,6 @@
 +(ASIFormDataRequest*)requestWithURL:(NSURL*)url filters:(NSDictionary*)filters;
 +(NSArray*)objectsWithData:(NSData*)jsonData;
 
++(void)loadObjectsWithDelegate:(id<RKObjectLoaderDelegate>)delegate;
+
 @end
