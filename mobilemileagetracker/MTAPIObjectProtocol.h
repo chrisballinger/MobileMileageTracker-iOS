@@ -23,5 +23,6 @@
 +(NSArray*)objectsWithData:(NSData*)jsonData;
 
 +(void)loadObjectsWithDelegate:(id<RKObjectLoaderDelegate>)delegate;
++(id<RKObjectMappingDefinition>)mappingDefinition;
 
 @end

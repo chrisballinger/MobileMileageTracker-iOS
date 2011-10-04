@@ -115,4 +115,31 @@
     return nil;
 }
 
++(id<RKObjectMappingDefinition>)mappingDefinition
+{
+    RKObjectMapping* articleMapping = [RKObjectMapping mappingForClass:[MTTrip class]];
+    [articleMapping mapKeyPath:kIDKey toAttribute:@"resourceID"];
+    [articleMapping mapKeyPath:kResourceURIKey toAttribute:@"resourceURI"];
+    [articleMapping mapKeyPath:kUserKey toAttribute:@"user"];
+    [articleMapping mapKeyPath:kTripNameKey toAttribute:@"name"];
+    //[articleMapping mapKeyPath:kTripDeviceKey toAttribute:@"device"];
+    [articleMapping mapRelationship:kTripDeviceKey withMapping:[MTDevice mappingDefinition]];
+    
+    
+    return articleMapping; 
+    
+}
+
++(void)loadObjectsWithDelegate:(id<RKObjectLoaderDelegate>)delegate;
+{
+    MTObjectStore *objectStore = [MTObjectStore sharedInstance];
+    
+    RKObjectMapping* articleMapping = [MTTrip mappingDefinition];
+    
+    [objectStore.objectManager.mappingProvider setMapping:articleMapping forKeyPath:@"trips"];
+    
+    
+    [objectStore.objectManager loadObjectsAtResourcePath:@"trip/?limit=0" delegate:delegate];
+}
+
 @end

@@ -55,12 +55,29 @@
     }
     else
     {
+        [MTTrip loadObjectsWithDelegate:self];
+
         
-        ASIFormDataRequest *request = [MTAPIObject requestWithURL:[MTTrip RESTurl] filters:nil];
+        
+        /*ASIFormDataRequest *request = [MTAPIObject requestWithURL:[MTTrip RESTurl] filters:nil];
         [request setDelegate:self];
-        [request startAsynchronous];
+        [request startAsynchronous];*/
     }
 }
+
+- (void)objectLoader:(RKObjectLoader*)objectLoader didLoadObjects:(NSArray*)objects {  
+    [objectStore addObjects:objects];  
+    [tripTableView reloadData];
+    NSLog(@"Added trips to objectstore");  
+    for(MTTrip *trip in objects)
+    {
+        NSLog(@"added %@",trip.name);
+    }
+}  
+
+- (void)objectLoader:(RKObjectLoader*)objectLoader didFailWithError:(NSError*)error {  
+    NSLog(@"Encountered an error: %@", error);  
+}  
 
 - (void)requestFinished:(ASIFormDataRequest *)request
 {

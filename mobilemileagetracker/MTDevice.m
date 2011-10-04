@@ -129,9 +129,8 @@
     return parent;
 } 
 
-+(void)loadObjectsWithDelegate:(id<RKObjectLoaderDelegate>)delegate;
++(id<RKObjectMappingDefinition>)mappingDefinition
 {
-    MTObjectStore *objectStore = [MTObjectStore sharedInstance];
     RKObjectMapping* articleMapping = [RKObjectMapping mappingForClass:[MTDevice class]];
     [articleMapping mapKeyPath:kIDKey toAttribute:@"resourceID"];
     [articleMapping mapKeyPath:kResourceURIKey toAttribute:@"resourceURI"];
@@ -140,7 +139,16 @@
     [articleMapping mapKeyPath:kDeviceTypeKey toAttribute:@"deviceType"];
     [articleMapping mapKeyPath:kDeviceUUIDKey toAttribute:@"uuid"];
     
-    [objectStore.objectManager.mappingProvider setMapping:articleMapping forKeyPath:@"objects"];
+    return articleMapping;
+}
+
++(void)loadObjectsWithDelegate:(id<RKObjectLoaderDelegate>)delegate;
+{
+    MTObjectStore *objectStore = [MTObjectStore sharedInstance];
+    
+    RKObjectMapping* articleMapping = [MTDevice mappingDefinition];
+    
+    [objectStore.objectManager.mappingProvider setMapping:articleMapping forKeyPath:@"devices"];
     
     
     [objectStore.objectManager loadObjectsAtResourcePath:@"device/?limit=0" delegate:delegate];
