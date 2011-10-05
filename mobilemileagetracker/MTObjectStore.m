@@ -46,6 +46,13 @@ static MTObjectStore *sharedStore = nil;
 
         MTObjectCache *objectCache = [[MTObjectCache alloc] init];
         objectManager.objectStore.managedObjectCache = objectCache;
+        
+        RKManagedObjectMapping* deviceMapping = [MTDevice mappingDefinition];
+        RKManagedObjectMapping* tripMapping = [MTTrip mappingDefinition];
+
+        [objectManager.mappingProvider setMapping:deviceMapping forKeyPath:@"devices"];
+        [objectManager.mappingProvider setMapping:tripMapping forKeyPath:@"trips"];
+        
     }
     return self;
 }

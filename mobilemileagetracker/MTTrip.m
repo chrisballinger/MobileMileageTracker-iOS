@@ -66,10 +66,7 @@
 {
     MTObjectStore *objectStore = [MTObjectStore sharedInstance];
     
-    RKManagedObjectMapping* articleMapping = [MTTrip mappingDefinition];
-    
-    [objectStore.objectManager.mappingProvider setMapping:articleMapping forKeyPath:@"trips"];
-    
+
     
     [objectStore.objectManager loadObjectsAtResourcePath:@"trip/?limit=0" delegate:delegate];
 }

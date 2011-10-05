@@ -81,12 +81,6 @@
 {
     MTObjectStore *objectStore = [MTObjectStore sharedInstance];
     
-    RKManagedObjectMapping* articleMapping = [MTDevice mappingDefinition];
-    
-    [objectStore.objectManager.mappingProvider setMapping:articleMapping forKeyPath:@"devices"];
-    
-    
-
     [objectStore.objectManager loadObjectsAtResourcePath:kAPIDeviceResourcePath delegate:delegate];
 
 }

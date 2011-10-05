@@ -61,7 +61,7 @@
     {
         
         [self objectLoader:nil didLoadObjects:[MTDevice cachedObjects]];
-        //[MTDevice loadObjectsWithDelegate:self];
+        [MTDevice loadObjectsWithDelegate:self];
         
         
         /*ASIFormDataRequest *request = [MTAPIObject requestWithURL:[MTDevice RESTurl] filters:nil];
