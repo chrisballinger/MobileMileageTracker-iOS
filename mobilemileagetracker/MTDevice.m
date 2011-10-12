@@ -24,9 +24,9 @@
         self.name = nil;
         self.deviceType = nil;
         self.uuid = nil;
-        self.resourceID = @"";
-        self.resourceURI = @"";
-        self.user = @"";
+        self.resourceID = nil;
+        self.resourceURI = nil;
+        self.user = nil;
     }
     return self;
 }

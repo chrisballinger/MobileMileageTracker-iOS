@@ -86,6 +86,7 @@
 
 - (void)deviceChosen:(NSNotification *)notification
 {
+    NSLog(@"Device chosen");
     MTDevice *device = [notification.userInfo objectForKey:@"device"];
     trip.device = device;
     [chooseDeviceButton setTitle:trip.device.name forState: UIControlStateNormal];
@@ -107,11 +108,17 @@
     }
     else
     {
-        ASIFormDataRequest *request = [MTDevice requestWithURL:[MTTrip RESTurl] filters:nil];
         trip.name = nameTextField.text;
-        [request appendPostData:[trip toJSON]];
-        [request setDelegate:self];
-        [request startAsynchronous];
+        
+        //NSError *error = [[[RKObjectManager sharedManager] objectStore] save];
+        //if(error)
+        //    NSLog(@"Error saving device: %@", error);
+        MTObjectStore *objectStore = [MTObjectStore sharedInstance];
+        
+        
+        [objectStore.objectManager postObject:trip delegate:objectStore];
+        
+        [objectStore.objectManager.objectStore.managedObjectContext deleteObject:trip];
     }
 }
 

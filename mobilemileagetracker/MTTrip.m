@@ -17,11 +17,14 @@
 
 -(id) init
 {
-    self = [super init];
+    self = [MTTrip object];
     if(self)
     {
         self.name = nil;
         self.device = nil;
+        self.resourceID = nil;
+        self.resourceURI = nil;
+        self.user = nil;
     }
     return self;
 }
@@ -56,7 +59,7 @@
     [articleMapping mapKeyPath:kTripNameKey toAttribute:@"name"];
     //[articleMapping mapKeyPath:kTripDeviceKey toAttribute:@"device"];
     [articleMapping mapRelationship:kTripDeviceKey withMapping:[MTDevice mappingDefinition]];
-    
+    //[articleMapping mapKeyOfNestedDictionaryToAttribute:@"device"];
     
     return articleMapping; 
     

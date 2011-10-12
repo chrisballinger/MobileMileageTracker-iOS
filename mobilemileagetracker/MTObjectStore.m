@@ -32,12 +32,14 @@ static MTObjectStore *sharedStore = nil;
         objectManager = [RKObjectManager objectManagerWithBaseURL:[APIUtil RESTurlString]];  
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         
-        RKLogConfigureByName("RestKit/Network", RKLogLevelCritical);
+        RKLogConfigureByName("RestKit/Network", RKLogLevelTrace);
         RKLogConfigureByName("RestKit/ObjectMapping", RKLogLevelWarning);
         RKLogConfigureByName("RestKit/CoreData", RKLogLevelDebug);
         
         objectManager.client.username = [defaults objectForKey:@"username"];
         objectManager.client.password = [defaults objectForKey:@"password"];
+        objectManager.serializationMIMEType = RKMIMETypeJSON;
+
         //objectManager.client.forceBasicAuthentication = YES;
 
         
@@ -48,16 +50,33 @@ static MTObjectStore *sharedStore = nil;
         objectManager.objectStore.managedObjectCache = objectCache;
         
         RKManagedObjectMapping* deviceMapping = [MTDevice mappingDefinition];
+        RKObjectMapping* inverseDeviceMapping = [deviceMapping inverseMapping];
+        //inverseDeviceMapping.setNilForMissingRelationships = YES;
+        //inverseDeviceMapping.setDefaultValueForMissingAttributes = YES;
+        
         RKManagedObjectMapping* tripMapping = [MTTrip mappingDefinition];
+        RKObjectMapping* inverseTripMapping = [tripMapping inverseMapping];
+        //inverseTripMapping.setNilForMissingRelationships = YES;
+        //inverseTripMapping.setDefaultValueForMissingAttributes = YES;
+        
+        //RKObjectMapping *inverseTripMapping = [RKObjectMapping serializationMapping];
+        //[objectMapping mapKeyPath:@"key path on your model" toAttribute:@"key path in your JSON/Form Encoded output"]   
+        //[inverseTripMapping mapKeyPath:@"name" toAttribute:@"name"];
+        //[inverseTripMapping mapKeyPath:@"device" toAttribute:@"device.resourceURI"];
+
 
         [objectManager.mappingProvider setMapping:deviceMapping forKeyPath:@"devices"];
-        [objectManager.mappingProvider setSerializationMapping:[deviceMapping inverseMapping] forClass:deviceMapping.objectClass];
+        [objectManager.mappingProvider setSerializationMapping:inverseDeviceMapping forClass:[MTDevice class]];
+        
+        
         [objectManager.mappingProvider setMapping:tripMapping forKeyPath:@"trips"];
+        [objectManager.mappingProvider setSerializationMapping:inverseTripMapping forClass:[MTTrip class]];
         
         
         RKObjectRouter* router = [[[RKObjectRouter alloc] init] autorelease];
         
         [router routeClass:[MTDevice class] toResourcePath:kAPIURLDeviceSuffix forMethod:RKRequestMethodPOST];
+        [router routeClass:[MTTrip class] toResourcePath:kAPIURLTripSuffix forMethod:RKRequestMethodPOST];
         objectManager.router = router;
         //[objectManager.router routeClass:[MTDevice class] toResourcePath:[kAPIURLDeviceSuffix stringByAppendingString:@"(resourceID)/"] forMethod:RKRequestMethodPUT];
 
@@ -110,14 +129,21 @@ static MTObjectStore *sharedStore = nil;
 
 -(void)addObject:(MTAPIObject*)object
 {
-    if([object isKindOfClass:[MTDevice class]])
-        [deviceStore setObject:object forKey:object.resourceURI];
-    else if([object isKindOfClass:[MTTrip class]])
-        [tripStore setObject:object forKey:object.resourceURI];
-    else if([object isKindOfClass:[MTLocation class]])
-        [locationStore setObject:object forKey:object.resourceURI];
-    
-    [objectStore setObject:object forKey:object.resourceURI];    
+    if(object.resourceID && ![object.resourceID isEqualToString:@""])
+    {
+        if([object isKindOfClass:[MTDevice class]])
+            [deviceStore setObject:object forKey:object.resourceURI];
+        else if([object isKindOfClass:[MTTrip class]])
+            [tripStore setObject:object forKey:object.resourceURI];
+        else if([object isKindOfClass:[MTLocation class]])
+            [locationStore setObject:object forKey:object.resourceURI];
+        
+        [objectStore setObject:object forKey:object.resourceURI];
+        
+        NSLog(@"%@, %@", object.resourceURI, object.resourceID);
+    }
+    else
+        NSLog(@"Null object! %@, %@", object.resourceID, object.resourceURI);
 }
 -(void)addObjects:(NSArray*)objects
 {

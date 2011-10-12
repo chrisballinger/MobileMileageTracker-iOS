@@ -104,6 +104,10 @@
         MTObjectStore *objectStore = [MTObjectStore sharedInstance];
         
         [objectStore.objectManager postObject:device delegate:objectStore];
+        
+        [objectStore.objectManager.objectStore.managedObjectContext deleteObject:device];
+        
+        [self.navigationController popViewControllerAnimated:YES];
     }
 }
 @end
