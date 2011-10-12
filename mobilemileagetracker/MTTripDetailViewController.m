@@ -119,6 +119,8 @@
         [objectStore.objectManager postObject:trip delegate:objectStore];
         
         [objectStore.objectManager.objectStore.managedObjectContext deleteObject:trip];
+        
+        [self.navigationController popViewControllerAnimated:YES];
     }
 }
 
