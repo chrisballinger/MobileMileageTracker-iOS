@@ -3,19 +3,36 @@
 //  RestKit
 //
 //  Created by Blake Watters on 12/1/10.
-//  Copyright 2010 Two Toasters. All rights reserved.
+//  Copyright 2010 Two Toasters
+//  
+//  Licensed under the Apache License, Version 2.0 (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at
+//  
+//  http://www.apache.org/licenses/LICENSE-2.0
+//  
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  See the License for the specific language governing permissions and
+//  limitations under the License.
 //
 
 #if TARGET_OS_IPHONE
 #import <UIKit/UIKit.h>
 #endif
 
+#import "RKClient.h"
 #import "RKRequestQueue.h"
 #import "RKResponse.h"
 #import "RKNotifications.h"
 #import "../Support/RKLog.h"
+#import "../Support/RKFixCategoryBug.h"
 
-static RKRequestQueue* gSharedQueue = nil;
+RK_FIX_CATEGORY_BUG(UIApplication_RKNetworkActivity)
+
+// Constants
+static NSMutableArray* RKRequestQueueInstances = nil;
 
 static const NSTimeInterval kFlushDelay = 0.3;
 
@@ -23,14 +40,16 @@ static const NSTimeInterval kFlushDelay = 0.3;
 #undef RKLogComponent
 #define RKLogComponent lcl_cRestKitNetworkQueue
 
-@interface RKRequestQueue (Private)
+@interface RKRequestQueue ()
+@property (nonatomic, retain, readwrite) NSString* name;
 
 // Declare the loading count read-write
-@property (nonatomic, readwrite) NSUInteger loadingCount;
+@property (nonatomic, assign, readwrite) NSUInteger loadingCount;
 @end
 
 @implementation RKRequestQueue
 
+@synthesize name = _name;
 @synthesize delegate = _delegate;
 @synthesize concurrentRequestsLimit = _concurrentRequestsLimit;
 @synthesize requestTimeout = _requestTimeout;
@@ -42,22 +61,68 @@ static const NSTimeInterval kFlushDelay = 0.3;
 #endif
 
 + (RKRequestQueue*)sharedQueue {
-	if (!gSharedQueue) {
-		gSharedQueue = [[RKRequestQueue alloc] init];
-		gSharedQueue.suspended = NO;
-        RKLogDebug(@"Shared queue initialized: %@", gSharedQueue);
-	}
-	return gSharedQueue;
+    RKLogWarning(@"Deprecated invocation of [RKRequestQueue sharedQueue]. Returning [RKClient sharedClient].requestQueue. Update your code to reference the queue you want explicitly.");
+    return [RKClient sharedClient].requestQueue;
 }
 
 + (void)setSharedQueue:(RKRequestQueue*)requestQueue {
-	if (gSharedQueue != requestQueue) {
-        RKLogDebug(@"Shared queue instance changed from %@ to %@", gSharedQueue, requestQueue);
-		[gSharedQueue release];
-		gSharedQueue = [requestQueue retain];
-	}
+    RKLogWarning(@"Deprecated access to [RKRequestQueue setSharedQueue:]. Invoking [[RKClient sharedClient] setRequestQueue:]. Update your code to reference the specific queue instance you want.");
+    [RKClient sharedClient].requestQueue = requestQueue;
 }
 
++ (id)requestQueue {
+    return [[self new] autorelease];
+}
+
++ (id)newRequestQueueWithName:(NSString*)name {
+    if (RKRequestQueueInstances == nil) {
+        RKRequestQueueInstances = [NSMutableArray new];        
+    }
+    
+    if ([self requestQueueExistsWithName:name]) {
+        return nil;
+    }
+    
+    RKRequestQueue* queue = [self new];
+    queue.name = name;
+    [RKRequestQueueInstances addObject:[NSValue valueWithNonretainedObject:queue]];
+    
+    return queue;
+}
+
++ (id)requestQueueWithName:(NSString *)name {
+    if (RKRequestQueueInstances == nil) {
+        RKRequestQueueInstances = [NSMutableArray new];        
+    }
+    
+    // Find existing reference
+    for (NSValue* value in RKRequestQueueInstances) {
+        RKRequestQueue* queue = (RKRequestQueue*) [value nonretainedObjectValue];
+        if ([queue.name isEqualToString:name]) {
+            return queue;
+        }
+    }
+    
+    RKRequestQueue* queue = [self requestQueue];
+    queue.name = name;
+    [RKRequestQueueInstances addObject:[NSValue valueWithNonretainedObject:queue]];
+    
+    return queue;
+}
+
++ (BOOL)requestQueueExistsWithName:(NSString*)name {
+    if (RKRequestQueueInstances) {
+        for (NSValue* value in RKRequestQueueInstances) {
+            RKRequestQueue* queue = (RKRequestQueue*) [value nonretainedObjectValue];
+            if ([queue.name isEqualToString:name]) {
+                return YES;
+            }
+        }
+    }
+    
+    return NO;
+}
+            
 - (id)init {
 	if ((self = [super init])) {
 		_requests = [[NSMutableArray alloc] init];
@@ -84,9 +149,23 @@ static const NSTimeInterval kFlushDelay = 0.3;
 	return self;
 }
 
+- (void)removeFromNamedQueues {
+    if (self.name) {
+        for (NSValue* value in RKRequestQueueInstances) {
+            RKRequestQueue* queue = (RKRequestQueue*) [value nonretainedObjectValue];
+            if ([queue.name isEqualToString:self.name]) {
+                [RKRequestQueueInstances removeObject:value];
+                return;
+            }
+        }
+    }
+}
+
 - (void)dealloc {
     RKLogDebug(@"Queue instance is being deallocated: %@", self);
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
+    [self removeFromNamedQueues];
 
     [_queueTimer invalidate];
     [_requests release];
@@ -97,6 +176,12 @@ static const NSTimeInterval kFlushDelay = 0.3;
 
 - (NSUInteger)count {
     return [_requests count];
+}
+
+- (NSString*)description {
+    return [NSString stringWithFormat:@"<%@: %p name=%@ suspended=%@ requestCount=%d loadingCount=%d/%d>", 
+            NSStringFromClass([self class]), self, self.name, self.suspended ? @"YES" : @"NO", 
+            self.count, self.loadingCount, self.concurrentRequestsLimit];
 }
 
 - (void)setLoadingCount:(NSUInteger)count {
@@ -110,7 +195,7 @@ static const NSTimeInterval kFlushDelay = 0.3;
 
 #if TARGET_OS_IPHONE
         if (self.showsNetworkActivityIndicatorWhenBusy) {
-            [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+            [[UIApplication sharedApplication] rk_pushNetworkActivity];
         }
 #endif
     } else if (_loadingCount > 0 && count == 0) {
@@ -123,7 +208,7 @@ static const NSTimeInterval kFlushDelay = 0.3;
         
 #if TARGET_OS_IPHONE
         if (self.showsNetworkActivityIndicatorWhenBusy) {
-            [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+            [[UIApplication sharedApplication] rk_popNetworkActivity];
         }
 #endif
     }
@@ -183,7 +268,7 @@ static const NSTimeInterval kFlushDelay = 0.3;
             }
 
             self.loadingCount = self.loadingCount + 1;
-            [request sendAsynchronously];
+            [request sendAsynchronously];            
             RKLogDebug(@"Sent request %@ from queue %@. Loading count = %d of %d", request, self, self.loadingCount, _concurrentRequestsLimit);
 
             if ([_delegate respondsToSelector:@selector(requestQueue:didSendRequest:)]) {
@@ -235,6 +320,7 @@ static const NSTimeInterval kFlushDelay = 0.3;
 
     @synchronized(self) {
         [_requests addObject:request];
+        request.queue = self;
     }
 
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -254,6 +340,7 @@ static const NSTimeInterval kFlushDelay = 0.3;
         RKLogTrace(@"Removing request %@ from queue %@", request, self);
         @synchronized(self) {
             [_requests removeObject:request];
+            request.queue = nil;
         }
 
         [[NSNotificationCenter defaultCenter] removeObserver:self name:RKRequestDidLoadResponseNotification object:request];
@@ -398,3 +485,55 @@ static const NSTimeInterval kFlushDelay = 0.3;
 }
 
 @end
+
+#if TARGET_OS_IPHONE
+
+@implementation UIApplication (RKNetworkActivity)
+
+static NSInteger rk_networkActivityCount;
+
+- (NSInteger)rk_networkActivityCount {
+    @synchronized(self) {
+        return rk_networkActivityCount;
+    }
+}
+
+- (void)rk_refreshActivityIndicator {
+    if(![NSThread isMainThread]) {
+        SEL sel_refresh = @selector(rk_refreshActivityIndicator);
+        [self performSelectorOnMainThread:sel_refresh withObject:nil waitUntilDone:NO];
+        return;
+    }
+    BOOL active = (self.rk_networkActivityCount > 0);
+    self.networkActivityIndicatorVisible = active;
+}
+
+- (void)rk_pushNetworkActivity {
+    @synchronized(self) {
+        rk_networkActivityCount++;
+    }
+    [self rk_refreshActivityIndicator];
+}
+
+- (void)rk_popNetworkActivity {
+    @synchronized(self) {
+        if (rk_networkActivityCount > 0) {
+            rk_networkActivityCount--;
+        } else {
+            rk_networkActivityCount = 0;
+            RKLogError(@"Unbalanced network activity: count already 0.");
+        }
+    }
+    [self rk_refreshActivityIndicator];
+}
+
+- (void)rk_resetNetworkActivity {
+    @synchronized(self) {
+        rk_networkActivityCount = 0;
+    }
+    [self rk_refreshActivityIndicator];
+}
+
+@end
+
+#endif

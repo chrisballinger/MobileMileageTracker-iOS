@@ -3,7 +3,19 @@
 //  RestKit
 //
 //  Created by Blake Watters on 1/15/10.
-//  Copyright 2010 Two Toasters. All rights reserved.
+//  Copyright 2010 Two Toasters
+//  
+//  Licensed under the Apache License, Version 2.0 (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at
+//  
+//  http://www.apache.org/licenses/LICENSE-2.0
+//  
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  See the License for the specific language governing permissions and
+//  limitations under the License.
 //
 
 #import "RKSpecEnvironment.h"
@@ -217,6 +229,34 @@
     assertThat(object, is(nilValue()));
     assertThat(error, isNot(nilValue()));
     assertThat([error localizedDescription], is(equalTo(@"Unexpected token, wanted '{', '}', '[', ']', ',', ':', 'true', 'false', 'null', '\"STRING\"', 'NUMBER'.")));
+}
+
+- (void)itShouldNotCrashOnFailureToParseBody {
+    RKResponse *response = [[RKResponse new] autorelease];
+    id mockResponse = [OCMockObject partialMockForObject:response];
+    [[[mockResponse stub] andReturn:@"test/fake"] MIMEType];
+    [[[mockResponse stub] andReturn:@"whatever"] bodyAsString];
+    NSError *error = nil;
+    id parsedResponse = [mockResponse parsedBody:&error];
+    assertThat(parsedResponse, is(nilValue()));
+}
+
+- (void)itShouldNotCrashWhenParserReturnsNilWithoutAnError {
+    RKResponse* response = [[[RKResponse alloc] init] autorelease];
+	id mockResponse = [OCMockObject partialMockForObject:response];
+	[[[mockResponse stub] andReturn:@""] bodyAsString];
+    [[[mockResponse stub] andReturn:RKMIMETypeJSON] MIMEType];
+    id mockParser = [OCMockObject mockForProtocol:@protocol(RKParser)];
+    id mockRegistry = [OCMockObject partialMockForObject:[RKParserRegistry sharedRegistry]];
+    [[[mockRegistry expect] andReturn:mockParser] parserForMIMEType:RKMIMETypeJSON];
+    NSError* error = nil;
+    [[[mockParser expect] andReturn:nil] objectFromString:@"" error:[OCMArg setTo:error]];
+    id object = [mockResponse parsedBody:&error];
+    [mockRegistry verify];
+    [mockParser verify];
+    [RKParserRegistry setSharedRegistry:nil];
+    assertThat(object, is(nilValue()));
+    assertThat(error, is(nilValue()));
 }
 
 @end

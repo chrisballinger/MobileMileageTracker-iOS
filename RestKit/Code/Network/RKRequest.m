@@ -3,11 +3,22 @@
 //  RestKit
 //
 //  Created by Jeremy Ellison on 7/27/09.
-//  Copyright 2009 Two Toasters. All rights reserved.
+//  Copyright 2009 Two Toasters
+//  
+//  Licensed under the Apache License, Version 2.0 (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at
+//  
+//  http://www.apache.org/licenses/LICENSE-2.0
+//  
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  See the License for the specific language governing permissions and
+//  limitations under the License.
 //
 
 #import "RKRequest.h"
-#import "RKRequestQueue.h"
 #import "RKResponse.h"
 #import "NSDictionary+RKRequestSerialization.h"
 #import "RKNotifications.h"
@@ -18,17 +29,36 @@
 #import "NSString+MD5.h"
 #import "RKLog.h"
 #import "RKRequestCache.h"
+#import "TDOAuth.h"
+
 
 // Set Logging Component
 #undef RKLogComponent
 #define RKLogComponent lcl_cRestKitNetwork
 
 @implementation RKRequest
+@class TDOAuth;
 
-@synthesize URL = _URL, URLRequest = _URLRequest, delegate = _delegate, additionalHTTPHeaders = _additionalHTTPHeaders,
-            params = _params, userData = _userData, username = _username, password = _password, method = _method,
-            forceBasicAuthentication = _forceBasicAuthentication, cachePolicy = _cachePolicy, cache = _cache,
-            cacheTimeoutInterval = _cacheTimeoutInterval;
+@synthesize URL = _URL;
+@synthesize URLRequest = _URLRequest;
+@synthesize delegate = _delegate;
+@synthesize additionalHTTPHeaders = _additionalHTTPHeaders;
+@synthesize params = _params;
+@synthesize userData = _userData;
+@synthesize authenticationType = _authenticationType;
+@synthesize username = _username;
+@synthesize password = _password;
+@synthesize method = _method;
+@synthesize cachePolicy = _cachePolicy;
+@synthesize cache = _cache;
+@synthesize cacheTimeoutInterval = _cacheTimeoutInterval;
+@synthesize OAuth1ConsumerKey = _OAuth1ConsumerKey;
+@synthesize OAuth1ConsumerSecret = _OAuth1ConsumerSecret;
+@synthesize OAuth1AccessToken = _OAuth1AccessToken;
+@synthesize OAuth1AccessTokenSecret = _OAuth1AccessTokenSecret;
+@synthesize OAuth2AccessToken = _OAuth2AccessToken;
+@synthesize OAuth2RefreshToken = _OAuth2RefreshToken;
+@synthesize queue = _queue;
 
 #if TARGET_OS_IPHONE
 @synthesize backgroundPolicy = _backgroundPolicy, backgroundTaskIdentifier = _backgroundTaskIdentifier;
@@ -43,7 +73,7 @@
 	if (self) {
 		_URL = [URL retain];
         [self reset];
-        _forceBasicAuthentication = NO;
+        _authenticationType = RKRequestAuthenticationTypeNone;
 		_cachePolicy = RKRequestCachePolicyDefault;
         _cacheTimeoutInterval = 0;
 	}
@@ -125,7 +155,19 @@
   	[_password release];
   	_password = nil;
     [_cache release];
-    _cache = nil;
+    _cache = nil;    
+    [_OAuth1ConsumerKey release];
+    _OAuth1ConsumerKey = nil;
+    [_OAuth1ConsumerSecret release];
+    _OAuth1ConsumerSecret = nil;
+    [_OAuth1AccessToken release];
+    _OAuth1AccessToken = nil;
+    [_OAuth1AccessTokenSecret release];
+    _OAuth1AccessTokenSecret = nil;
+    [_OAuth2AccessToken release];
+    _OAuth2AccessToken = nil;
+    [_OAuth2RefreshToken release];
+    _OAuth2RefreshToken = nil;
     
     // Cleanup a background task if there is any
     [self cleanupBackgroundTask];
@@ -133,8 +175,12 @@
     [super dealloc];
 }
 
+- (BOOL)shouldSendParams {
+    return (_params && (_method != RKRequestMethodGET && _method != RKRequestMethodHEAD));
+}
+
 - (void)setRequestBody {
-	if (_params && (_method != RKRequestMethodGET && _method != RKRequestMethodHEAD)) {
+	if ([self shouldSendParams]) {
 		// Prefer the use of a stream over a raw body
 		if ([_params respondsToSelector:@selector(HTTPBodyStream)]) {
             // NOTE: This causes the stream to be retained. For RKParams, this will
@@ -168,7 +214,7 @@
 		[_URLRequest setValue:[_additionalHTTPHeaders valueForKey:header] forHTTPHeaderField:header];
 	}
 
-	if (_params != nil) {
+	if ([self shouldSendParams]) {
 		// Temporarily support older RKRequestSerializable implementations
 		if ([_params respondsToSelector:@selector(HTTPHeaderValueForContentType)]) {
 			[_URLRequest setValue:[_params HTTPHeaderValueForContentType] forHTTPHeaderField:@"Content-Type"];
@@ -183,7 +229,7 @@
     }
     
     // Add authentication headers so we don't have to deal with an extra cycle for each message requiring basic auth.
-    if (self.forceBasicAuthentication) {        
+    if (self.authenticationType == RKRequestAuthenticationTypeHTTPBasic) {        
         CFHTTPMessageRef dummyRequest = CFHTTPMessageCreateRequest(kCFAllocatorDefault, (CFStringRef)[self HTTPMethod], (CFURLRef)[self URL], kCFHTTPVersion1_1);
         
         CFHTTPMessageAddAuthentication(dummyRequest, nil, (CFStringRef)_username, (CFStringRef)_password,kCFHTTPAuthenticationSchemeBasic, FALSE);
@@ -191,6 +237,35 @@
         [_URLRequest setValue:(NSString *)authorizationString forHTTPHeaderField:@"Authorization"];
         CFRelease(dummyRequest);
         CFRelease(authorizationString);
+    }
+    
+    // Add OAuth headers if is need it
+    // OAuth 1
+    if(self.authenticationType == RKRequestAuthenticationTypeOAuth1){
+        NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
+        for(NSString *parameter in [[_URL query] componentsSeparatedByString:@"&"]) {
+            NSArray *keyValuePair = [parameter componentsSeparatedByString:@"="];
+            [parameters setValue:[[keyValuePair objectAtIndex:1] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding]
+                          forKey:[keyValuePair objectAtIndex:0]];
+        }
+        
+        NSURLRequest *echo = [TDOAuth URLRequestForPath:[self resourcePath]
+                                          GETParameters:parameters
+                                                 scheme:[_URL scheme]
+                                                   host:[_URL host]
+                                            consumerKey:self.OAuth1ConsumerKey
+                                         consumerSecret:self.OAuth1ConsumerSecret
+                                            accessToken:self.OAuth1AccessToken
+                                            tokenSecret:self.OAuth1AccessTokenSecret];
+        [_URLRequest setValue:[echo valueForHTTPHeaderField:@"Authorization"] forHTTPHeaderField:@"Authorization"];
+        [_URLRequest setValue:[echo valueForHTTPHeaderField:@"Accept-Encoding"] forHTTPHeaderField:@"Accept-Encoding"];
+        [_URLRequest setValue:[echo valueForHTTPHeaderField:@"User-Agent"] forHTTPHeaderField:@"User-Agent"];
+    }
+    
+    // OAuth 2 valid request
+    if(self.authenticationType == RKRequestAuthenticationTypeOAuth2){
+        NSString *authorizationString = [NSString stringWithFormat:@"OAuth2 %@",self.OAuth2AccessToken];
+        [_URLRequest setValue:authorizationString forHTTPHeaderField:@"Authorization"];
     }
     
     if (self.cachePolicy & RKRequestCachePolicyEtag) {
@@ -248,9 +323,15 @@
 	}
 }
 
+// TODO: We may want to eliminate the coupling between the request queue and individual queue instances.
+// We could factor the knowledge about the queue out of RKRequest entirely, but it will break behavior.
 - (void)send {
     NSAssert(NO == _isLoading || NO == _isLoaded, @"Cannot send a request that is loading or loaded without resetting it first.");
-	[[RKRequestQueue sharedQueue] addRequest:self];
+    if (self.queue) {
+        [self.queue addRequest:self];
+    } else {
+        [self sendAsynchronously];
+    }
 }
 
 - (void)fireAsynchronousRequest {
@@ -267,6 +348,7 @@
     }
     
     RKResponse* response = [[[RKResponse alloc] initWithRequest:self] autorelease];
+    
     _connection = [[NSURLConnection connectionWithRequest:_URLRequest delegate:response] retain];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:RKRequestSentNotification object:self userInfo:nil];
@@ -553,20 +635,33 @@
 #endif
 }
 
-- (NSString*)cacheKey {
+- (BOOL)isCacheable {
+    // DELETE is not cacheable
     if (_method == RKRequestMethodDELETE) {
+        return NO;
+    }
+    
+    return YES;
+}
+
+- (NSString*)cacheKey {
+    if (! [self isCacheable]) {
         return nil;
     }
+    
     // Use [_params HTTPBody] because the URLRequest body may not have been set up yet.
-    NSString* compositCacheKey = nil;
+    NSString* compositeCacheKey = nil;
     if (_params) {
         if ([_params respondsToSelector:@selector(HTTPBody)]) {
-            compositCacheKey = [NSString stringWithFormat:@"%@-%d-%@", self.URL, _method, [_params HTTPBody]];
+            compositeCacheKey = [NSString stringWithFormat:@"%@-%d-%@", self.URL, _method, [_params HTTPBody]];
+        } else if ([_params isKindOfClass:[RKParams class]]) {
+            compositeCacheKey = [NSString stringWithFormat:@"%@-%d-%@", self.URL, _method, [(RKParams *)_params MD5]];
         }
     } else {
-        compositCacheKey = [NSString stringWithFormat:@"%@-%d", self.URL, _method];
+        compositeCacheKey = [NSString stringWithFormat:@"%@-%d", self.URL, _method];
     }
-    return [compositCacheKey MD5];
+    NSAssert(compositeCacheKey, @"Expected a cacheKey to be generated for request %@, but got nil", compositeCacheKey);
+    return [compositeCacheKey MD5];
 }
 
 @end

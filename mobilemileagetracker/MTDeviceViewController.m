@@ -46,6 +46,9 @@
     else
         self.title = @"Devices";
     objectStore = [MTObjectStore sharedInstance];
+    
+    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+    [center addObserver:self selector:@selector(devicesLoaded) name:kObjectsLoadedNotificationName object:nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -68,6 +71,11 @@
         [request setDelegate:self];
         [request startAsynchronous];*/
     }
+}
+
+-(void)devicesLoaded
+{
+    [deviceTableView reloadData];
 }
 
 - (void)objectLoader:(RKObjectLoader*)objectLoader didLoadObjects:(NSArray*)objects {  
@@ -170,7 +178,6 @@
     }
     else
     {
-    
         MTDeviceDetailViewController *deviceDetailController = [[MTDeviceDetailViewController alloc] init];
         deviceDetailController.device = device;
         [self.navigationController pushViewController:deviceDetailController animated:YES];

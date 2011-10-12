@@ -3,12 +3,23 @@
 //  RKFramework
 //
 //  Created by Blake Watters on 7/28/09.
-//  Copyright 2009 Two Toasters. All rights reserved.
+//  Copyright 2009 Two Toasters
+//  
+//  Licensed under the Apache License, Version 2.0 (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at
+//  
+//  http://www.apache.org/licenses/LICENSE-2.0
+//  
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  See the License for the specific language governing permissions and
+//  limitations under the License.
 //
 
 #import "RKResponse.h"
 #import "RKNotifications.h"
-#import "RKNetwork.h"
 #import "RKLog.h"
 #import "RKParserRegistry.h"
 #import "RKClient.h"
@@ -139,7 +150,7 @@ extern NSString* cacheURLKey;
 		NSURLCredential *newCredential;
 		newCredential=[NSURLCredential credentialWithUser:[NSString stringWithFormat:@"%@", _request.username]
 		                                         password:[NSString stringWithFormat:@"%@", _request.password]
-		                                      persistence:RKNetworkGetGlobalCredentialPersistence()];
+                                              persistence:NSURLCredentialPersistenceNone];
 		[[challenge sender] useCredential:newCredential
 		       forAuthenticationChallenge:challenge];
 	} else {
@@ -176,16 +187,19 @@ extern NSString* cacheURLKey;
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
 	[_body appendData:data];
+    if ([[_request delegate] respondsToSelector:@selector(request:didReceivedData:totalBytesReceived:totalBytesExectedToReceive:)]) {
+        [[_request delegate] request:_request didReceivedData:[data length] totalBytesReceived:[_body length] totalBytesExectedToReceive:_httpURLResponse.expectedContentLength];
+    }
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSHTTPURLResponse *)response {	
     RKLogDebug(@"NSHTTPURLResponse Status Code: %d", [response statusCode]);
     RKLogDebug(@"Headers: %@", [response allHeaderFields]);
-    RKLogTrace(@"Read response body: %@", [self bodyAsString]);
 	_httpURLResponse = [response retain];
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
+	RKLogTrace(@"Read response body: %@", [self bodyAsString]);
 	[_request didFinishLoad:self];
 }
 
@@ -196,7 +210,7 @@ extern NSString* cacheURLKey;
 
 - (NSInputStream *)connection:(NSURLConnection *)connection needNewBodyStream:(NSURLRequest *)request {
     RKLogWarning(@"RestKit was asked to retransmit a new body stream for a request. Possible connection error or authentication challenge?");
-    return [self.request.params HTTPBodyStream];
+    return nil;
 }
 
 // In the event that the url request is a post, this delegate method will be called before
@@ -231,9 +245,15 @@ extern NSString* cacheURLKey;
 
 - (id)parsedBody:(NSError**)error {
     id<RKParser> parser = [[RKParserRegistry sharedRegistry] parserForMIMEType:[self MIMEType]];
+    if (! parser) {
+        RKLogWarning(@"Unable to parse response body: no parser registered for MIME Type '%@'", [self MIMEType]);
+        return nil;
+    }
     id object = [parser objectFromString:[self bodyAsString] error:error];
     if (object == nil) {
-        RKLogError(@"Unable to parse response body: %@", [*error localizedDescription]);
+        if (*error) {
+            RKLogError(@"Unable to parse response body: %@", [*error localizedDescription]);
+        }
         return nil;
     }
     return object;

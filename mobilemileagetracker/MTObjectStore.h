@@ -10,8 +10,10 @@
 #import <RestKit/RestKit.h>
 #import "MTAPIObject.h"
 
+#define kObjectsLoadedNotificationName @"ObjectsLoadedNotification"
 
-@interface MTObjectStore : NSObject
+
+@interface MTObjectStore : NSObject <RKObjectLoaderDelegate>
 {
     NSMutableDictionary *deviceStore;
     NSMutableDictionary *tripStore;
@@ -31,6 +33,8 @@
 -(NSDictionary*)getTrips;
 -(NSDictionary*)getLocations;
 -(NSDictionary*)getObjects;
+
++(NSArray*)cachedObjectsForResourcePath:(NSString*)resourcePath;
 
 @property (nonatomic, retain) RKObjectManager *objectManager;
 

@@ -38,7 +38,7 @@ static MTObjectStore *sharedStore = nil;
         
         objectManager.client.username = [defaults objectForKey:@"username"];
         objectManager.client.password = [defaults objectForKey:@"password"];
-        objectManager.client.forceBasicAuthentication = YES;
+        //objectManager.client.forceBasicAuthentication = YES;
 
         
         objectManager.objectStore = [RKManagedObjectStore objectStoreWithStoreFilename:@"MTObjectStore.sqlite"];
@@ -53,6 +53,12 @@ static MTObjectStore *sharedStore = nil;
         [objectManager.mappingProvider setMapping:deviceMapping forKeyPath:@"devices"];
         [objectManager.mappingProvider setMapping:tripMapping forKeyPath:@"trips"];
         
+        RKObjectRouter* router = [[[RKObjectRouter alloc] init] autorelease];
+        
+        [router routeClass:[MTDevice class] toResourcePath:kAPIURLDeviceSuffix forMethod:RKRequestMethodPOST];
+        objectManager.router = router;
+        //[objectManager.router routeClass:[MTDevice class] toResourcePath:[kAPIURLDeviceSuffix stringByAppendingString:@"(resourceID)/"] forMethod:RKRequestMethodPUT];
+
     }
     return self;
 }
@@ -149,6 +155,32 @@ static MTObjectStore *sharedStore = nil;
 {
     return objectStore;
 }
+
++(NSArray*)cachedObjectsForResourcePath:(NSString*)resourcePath
+{
+    MTObjectStore *objectStore = [MTObjectStore sharedInstance];
+    
+    NSArray* cachedObjects = nil; 
+    if (objectStore.objectManager.objectStore.managedObjectCache) { 
+        NSArray* cacheFetchRequests = [objectStore.objectManager.objectStore.managedObjectCache fetchRequestsForResourcePath:resourcePath]; 
+        cachedObjects = [NSManagedObject 
+                         objectsWithFetchRequests:cacheFetchRequests]; 
+    } 
+    return cachedObjects; 
+}
+
+- (void)objectLoader:(RKObjectLoader*)objectLoader didLoadObjects:(NSArray*)objects {  
+    [self addObjects:objects];
+    
+    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+    
+    NSDictionary *objectsDictionary = [NSDictionary dictionaryWithObject:objects forKey:@"objects"];
+    [center postNotificationName:kObjectsLoadedNotificationName object:self userInfo:objectsDictionary];
+}  
+
+- (void)objectLoader:(RKObjectLoader*)objectLoader didFailWithError:(NSError*)error {  
+    NSLog(@"Encountered an error: %@", error);  
+}  
 
 
 @end

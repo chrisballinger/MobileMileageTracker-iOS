@@ -3,7 +3,19 @@
 //  RestKit
 //
 //  Created by Jeremy Ellison on 5/9/11.
-//  Copyright 2011 Two Toasters. All rights reserved.
+//  Copyright 2011 Two Toasters
+//  
+//  Licensed under the Apache License, Version 2.0 (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at
+//  
+//  http://www.apache.org/licenses/LICENSE-2.0
+//  
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  See the License for the specific language governing permissions and
+//  limitations under the License.
 //
 
 #import "RKSpecEnvironment.h"
@@ -27,8 +39,8 @@
     id<RKRequestSerializable> serialization = [serializer serializationForMIMEType:@"application/x-www-form-urlencoded" error:&error];
     NSString* data = [[[NSString alloc] initWithData:[serialization HTTPBody] encoding:NSUTF8StringEncoding] autorelease];
     data = [data stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    [expectThat(error) should:be(nil)];
-    [expectThat(data) should:be(@"key2-form-name=value2&key1-form-name=value1")];
+    assertThat(error, is(nilValue()));
+    assertThat(data, is(equalTo(@"key2-form-name=value2&key1-form-name=value1")));
 }
 
 - (void)itShouldSerializeADateToFormEncodedData {
@@ -43,8 +55,28 @@
     NSString* data = [[[NSString alloc] initWithData:[serialization HTTPBody] encoding:NSUTF8StringEncoding] autorelease];
     data = [data stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     
-    [expectThat(error) should:be(nil)];
-    [expectThat(data) should:be(@"key1-form-name=value1&date-form-name=1970-01-01 00:00:00 +0000")];
+    assertThat(error, is(nilValue()));
+    assertThat(data, is(equalTo(@"key1-form-name=value1&date-form-name=1970-01-01 00:00:00 +0000")));
+}
+
+- (void)itShouldSerializeADateToAStringUsingThePreferredDateFormatter {
+    NSDictionary* object = [NSDictionary dictionaryWithObjectsAndKeys:@"value1", @"key1", [NSDate dateWithTimeIntervalSince1970:0], @"date", nil];
+    RKObjectMapping* mapping = [RKObjectMapping mappingForClass:[NSDictionary class]];
+    NSDateFormatter *dateFormatter = [[NSDateFormatter new] autorelease];
+    dateFormatter.dateFormat = @"MM/dd/yyyy";
+    dateFormatter.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:0];
+    mapping.preferredDateFormatter = dateFormatter;
+    [mapping addAttributeMapping:[RKObjectAttributeMapping mappingFromKeyPath:@"key1" toKeyPath:@"key1-form-name"]];
+    [mapping addAttributeMapping:[RKObjectAttributeMapping mappingFromKeyPath:@"date" toKeyPath:@"date-form-name"]];
+    RKObjectSerializer* serializer = [RKObjectSerializer serializerWithObject:object mapping:mapping];
+    NSError* error = nil;
+    id<RKRequestSerializable> serialization = [serializer serializationForMIMEType:@"application/x-www-form-urlencoded" error:&error];
+    
+    NSString* data = [[[NSString alloc] initWithData:[serialization HTTPBody] encoding:NSUTF8StringEncoding] autorelease];
+    data = [data stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    
+    assertThat(error, is(nilValue()));
+    assertThat(data, is(equalTo(@"key1-form-name=value1&date-form-name=01/01/1970")));
 }
 
 - (void)itShouldSerializeADateToJSON {
@@ -60,8 +92,8 @@
     NSString* data = [[[NSString alloc] initWithData:[serialization HTTPBody] encoding:NSUTF8StringEncoding] autorelease];
     data = [data stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     
-    [expectThat(error) should:be(nil)];
-    [expectThat(data) should:be(@"{\"key1-form-name\":\"value1\",\"date-form-name\":\"1970-01-01 00:00:00 +0000\"}")];
+    assertThat(error, is(nilValue()));
+    assertThat(data, is(equalTo(@"{\"key1-form-name\":\"value1\",\"date-form-name\":\"1970-01-01 00:00:00 +0000\"}")));
 }
 
 - (void)itShouldSerializeNSDecimalNumberAttributesToJSON {
@@ -77,8 +109,8 @@
     NSString* data = [[[NSString alloc] initWithData:[serialization HTTPBody] encoding:NSUTF8StringEncoding] autorelease];
     data = [data stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     
-    [expectThat(error) should:be(nil)];
-    [expectThat(data) should:be(@"{\"key1-form-name\":\"value1\",\"number-form-name\":\"18274191731731.4557723623\"}")];
+    assertThat(error, is(nilValue()));
+    assertThat(data, is(equalTo(@"{\"key1-form-name\":\"value1\",\"number-form-name\":\"18274191731731.4557723623\"}")));
 }
 
 - (void)itShouldSerializeRelationshipsToo {
@@ -101,8 +133,8 @@
     NSString* data = [[[NSString alloc] initWithData:[serialization HTTPBody] encoding:NSUTF8StringEncoding] autorelease];
     data = [data stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     
-    [expectThat(error) should:be(nil)];
-    [expectThat(data) should:be(@"key1-form-name=value1&relationship1-form-name[r1k1][]=relationship1Value1&relationship1-form-name[r1k1][]=relationship1Value2&key2-form-name=value2&relationship2-form-name[subKey1]=subValue1")];
+    assertThat(error, is(nilValue()));
+    assertThat(data, is(equalTo(@"key1-form-name=value1&relationship1-form-name[r1k1][]=relationship1Value1&relationship1-form-name[r1k1][]=relationship1Value2&key2-form-name=value2&relationship2-form-name[subKey1]=subValue1")));
 }
 
 - (void)itShouldSerializeToJSON {
@@ -116,8 +148,8 @@
     NSString* data = [[[NSString alloc] initWithData:[serialization HTTPBody] encoding:NSUTF8StringEncoding] autorelease];
     data = [data stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     
-    [expectThat(error) should:be(nil)];
-    [expectThat(data) should:be(@"{\"key2-form-name\":\"value2\",\"key1-form-name\":\"value1\"}")];
+    assertThat(error, is(nilValue()));
+    assertThat(data, is(equalTo(@"{\"key2-form-name\":\"value2\",\"key1-form-name\":\"value1\"}")));
 }
 
 - (void)itShouldSetReturnNilIfItDoesNotFindAnythingToSerialize {
@@ -127,7 +159,8 @@
     RKObjectSerializer* serializer = [RKObjectSerializer serializerWithObject:object mapping:mapping];
     NSError* error = nil;
     id<RKRequestSerializable> serialization = [serializer serializationForMIMEType:@"application/json" error:&error];
-    [expectThat(serialization) should:be(nil)];
+    
+    assertThat(serialization, is(nilValue()));
 }
 
 - (void)itShouldSerializeNestedObjectsContainingDatesToJSON {
@@ -166,8 +199,9 @@
     id<RKRequestSerializable> serialization = [serializer serializationForMIMEType:@"application/x-www-form-urlencoded" error:&error];
     NSString* data = [[[NSString alloc] initWithData:[serialization HTTPBody] encoding:NSUTF8StringEncoding] autorelease];
     data = [data stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    [expectThat(error) should:be(nil)];
-    [expectThat(data) should:be(@"stuff[key2-form-name]=value2&stuff[key1-form-name]=value1")];
+    
+    assertThat(error, is(nilValue()));
+    assertThat(data, is(equalTo(@"stuff[key2-form-name]=value2&stuff[key1-form-name]=value1")));
 }
 
 - (void)itShouldSerializeToManyRelationships {
@@ -208,8 +242,8 @@
     NSString* data = [[[NSString alloc] initWithData:[serialization HTTPBody] encoding:NSUTF8StringEncoding] autorelease];
     data = [data stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     
-    [expectThat(error) should:be(nil)];
-    [expectThat(data) should:be(@"{\"boolean-value\":true}")];
+    assertThat(error, is(nilValue()));
+    assertThat(data, is(equalTo(@"{\"boolean-value\":true}")));
 }
 
 @end

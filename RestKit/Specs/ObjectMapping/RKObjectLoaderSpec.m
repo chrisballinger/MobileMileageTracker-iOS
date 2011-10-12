@@ -3,12 +3,25 @@
 //  RestKit
 //
 //  Created by Blake Watters on 4/27/11.
-//  Copyright 2011 Two Toasters. All rights reserved.
+//  Copyright 2011 Two Toasters
+//  
+//  Licensed under the Apache License, Version 2.0 (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at
+//  
+//  http://www.apache.org/licenses/LICENSE-2.0
+//  
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  See the License for the specific language governing permissions and
+//  limitations under the License.
 //
 
 #import "RKSpecEnvironment.h"
 #import "RKObjectMappingProvider.h"
 #import "RKErrorMessage.h"
+#import "RKJSONParserJSONKit.h"
 
 // Models
 #import "RKObjectLoaderSpecResultModel.h"
@@ -88,13 +101,6 @@
 
 @implementation RKObjectLoaderSpec
 
-- (void)beforeAll {
-    RKRequestQueue* queue = [[RKRequestQueue alloc] init];
-    queue.suspended = NO;
-    [RKRequestQueue setSharedQueue:queue];
-    [queue release];
-}
-
 - (RKObjectMappingProvider*)providerForComplexUser {
     RKObjectMappingProvider* provider = [[RKObjectMappingProvider new] autorelease];
     RKObjectMapping* userMapping = [RKObjectMapping mappingForClass:[RKSpecComplexUser class]];
@@ -113,7 +119,7 @@
 }
 
 - (void)itShouldHandleTheErrorCaseAppropriately {
-    RKObjectManager* objectManager = [RKObjectManager objectManagerWithBaseURL:RKSpecGetBaseURL()];
+    RKObjectManager* objectManager = RKSpecNewObjectManager();
     RKSpecResponseLoader* responseLoader = [RKSpecResponseLoader responseLoader];
     RKObjectLoader* objectLoader = [objectManager objectLoaderWithResourcePath:@"/errors.json" delegate:responseLoader];
     objectLoader.method = RKRequestMethodGET;
@@ -273,6 +279,29 @@
     assertThat([loader.mappableData valueForKey:@"newKey"], is(equalTo(@"monkey!")));
 }
 
+- (void)itShouldAllowYouToPostAnObjectAndHandleAnEmpty204Response {
+    RKObjectMapping* mapping = [RKObjectMapping mappingForClass:[RKSpecComplexUser class]];
+    [mapping mapAttributes:@"firstname", @"lastname", @"email", nil];
+    RKObjectMapping* serializationMapping = [mapping inverseMapping];
+    
+    RKObjectManager* objectManager = RKSpecNewObjectManager();
+    [objectManager.router routeClass:[RKSpecComplexUser class] toResourcePath:@"/204"];
+    [objectManager.mappingProvider setSerializationMapping:serializationMapping forClass:[RKSpecComplexUser class]];
+    
+    RKSpecComplexUser* user = [[RKSpecComplexUser new] autorelease];
+    user.firstname = @"Blake";
+    user.lastname = @"Watters";
+    user.email = @"blake@restkit.org";
+    
+    RKSpecResponseLoader* responseLoader = [RKSpecResponseLoader responseLoader];
+    RKObjectLoader* loader = [objectManager objectLoaderForObject:user method:RKRequestMethodPOST delegate:responseLoader];
+    loader.objectMapping = mapping;
+    [loader send];
+    [responseLoader waitForResponse];
+    assertThatBool([responseLoader success], is(equalToBool(YES)));
+    assertThat(user.email, is(equalTo(@"blake@restkit.org")));
+}
+
 - (void)itShouldAllowYouToPOSTAnObjectAndMapBackNonNestedContent {
     RKObjectMapping* mapping = [RKObjectMapping mappingForClass:[RKSpecComplexUser class]];
     [mapping mapAttributes:@"firstname", @"lastname", @"email", nil];
@@ -280,6 +309,33 @@
     
     RKObjectManager* objectManager = RKSpecNewObjectManager();
     [objectManager.router routeClass:[RKSpecComplexUser class] toResourcePath:@"/notNestedUser"];
+    [objectManager.mappingProvider setSerializationMapping:serializationMapping forClass:[RKSpecComplexUser class]];
+    
+    RKSpecComplexUser* user = [[RKSpecComplexUser new] autorelease];
+    user.firstname = @"Blake";
+    user.lastname = @"Watters";
+    user.email = @"blake@restkit.org";
+    
+    RKSpecResponseLoader* responseLoader = [RKSpecResponseLoader responseLoader];
+    RKObjectLoader* loader = [objectManager objectLoaderForObject:user method:RKRequestMethodPOST delegate:responseLoader];
+    loader.objectMapping = mapping;
+    [loader send];
+    [responseLoader waitForResponse];
+    assertThatBool([responseLoader success], is(equalToBool(YES)));
+    assertThat(user.email, is(equalTo(@"changed")));
+}
+
+- (void)itShouldMapContentWithoutAMIMEType {
+    // TODO: Not sure that this is even worth it. Unable to get the Sinatra server to produce such a response
+    return;
+    RKLogConfigureByName("RestKit/Network", RKLogLevelTrace);
+    RKObjectMapping* mapping = [RKObjectMapping mappingForClass:[RKSpecComplexUser class]];
+    [mapping mapAttributes:@"firstname", @"lastname", @"email", nil];
+    RKObjectMapping* serializationMapping = [mapping inverseMapping];
+    
+    RKObjectManager* objectManager = RKSpecNewObjectManager();
+    [[RKParserRegistry sharedRegistry] setParserClass:[RKJSONParserJSONKit class] forMIMEType:@"text/html"];
+    [objectManager.router routeClass:[RKSpecComplexUser class] toResourcePath:@"/noMIME"];
     [objectManager.mappingProvider setSerializationMapping:serializationMapping forClass:[RKSpecComplexUser class]];
     
     RKSpecComplexUser* user = [[RKSpecComplexUser new] autorelease];
@@ -463,4 +519,5 @@
     assertThatBool([responseLoader.objects isKindOfClass:[NSArray class]], is(equalToBool(YES)));
     assertThat(responseLoader.objects, is(empty()));
 }
+
 @end

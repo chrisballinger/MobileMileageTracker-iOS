@@ -3,11 +3,23 @@
 //  RestKit
 //
 //  Created by Jeremy Ellison on 5/6/11.
-//  Copyright 2011 Two Toasters. All rights reserved.
+//  Copyright 2011 Two Toasters
+//  
+//  Licensed under the Apache License, Version 2.0 (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at
+//  
+//  http://www.apache.org/licenses/LICENSE-2.0
+//  
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  See the License for the specific language governing permissions and
+//  limitations under the License.
 //
 
 #import "RKObjectMapping.h"
-#import "RKObjectDynamicMapping.h"
+#import "RKDynamicObjectMapping.h"
 
 /**
  Responsible for providing object mappings to an instance of the object mapper
@@ -52,7 +64,7 @@
  For example, if we configure have a simple resource called 'person' that returns JSON in the following
  format:
  
-    { "person": { "first_name": "Blake", "last_name": "Watters } }
+    { "person": { "first_name": "Blake", "last_name": "Watters" } }
  
  We might configure a mapping like so:
     
@@ -62,7 +74,7 @@
  If we want to parse the above JSON and serialize it such that using postObject: or putObject: use the same format,
  we can auto-generate the serialization mapping and set the whole thing up in one shot:
  
-    [[RKObjectManager sharedManager].mappingProvider registerMapping:mapping withRootKeyPath:@"user"];
+    [[RKObjectManager sharedManager].mappingProvider registerMapping:mapping withRootKeyPath:@"person"];
  
  This will call setMapping:forKeyPath: for you, then generate a serialization mapping and set the root
  keyPath as well.

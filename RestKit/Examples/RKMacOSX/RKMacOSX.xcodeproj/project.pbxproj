@@ -225,14 +225,14 @@
 				25D63958135184F1000879B1 /* libRestKitNetwork.a */,
 				25D6395A135184F1000879B1 /* libRestKitObjectMapping.a */,
 				25D6395C135184F1000879B1 /* libRestKitSupport.a */,
-				25FB6DA013E4848200F48969 /* libRestKitJSONParser+NXJSON.a */,
+				25FB6DA013E4848200F48969 /* libRestKitJSONParserNXJSON.a */,
 				25D6395E135184F1000879B1 /* libRestKitJSONParserYAJL.a */,
 				25D63960135184F1000879B1 /* libRestKitJSONParserSBJSON.a */,
 				25D63962135184F1000879B1 /* libRestKitJSONParserJSONKit.a */,
 				25D63964135184F1000879B1 /* libRestKitXMLParserLibxml.a */,
 				25D63966135184F1000879B1 /* libRestKitCoreData.a */,
 				25D63968135184F1000879B1 /* libRestKitThree20.a */,
-				25D6396A135184F1000879B1 /* UISpec.app */,
+				25D6396A135184F1000879B1 /* RestKitSpecs.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -367,17 +367,16 @@
 			remoteRef = 25D63967135184F1000879B1 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		25D6396A135184F1000879B1 /* UISpec.app */ = {
+		25D6396A135184F1000879B1 /* RestKitSpecs.app */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.application;
-			path = UISpec.app;
+			path = RestKitSpecs.app;
 			remoteRef = 25D63969135184F1000879B1 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		25FB6DA013E4848200F48969 /* libRestKitJSONParser+NXJSON.a */ = {
+		25FB6DA013E4848200F48969 /* libRestKitJSONParserNXJSON.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
-			name = "libRestKitJSONParser+NXJSON.a";
 			path = libRestKitJSONParserNXJSON.a;
 			remoteRef = 25FB6D9F13E4848200F48969 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
@@ -459,10 +458,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				ONLY_ACTIVE_ARCH = YES;
-				OTHER_LDFLAGS = (
-					"-ObjC",
-					"-all_load",
-				);
+				OTHER_LDFLAGS = "-ObjC";
 				SDKROOT = macosx;
 			};
 			name = Debug;
@@ -477,10 +473,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
-				OTHER_LDFLAGS = (
-					"-ObjC",
-					"-all_load",
-				);
+				OTHER_LDFLAGS = "-ObjC";
 				SDKROOT = macosx;
 			};
 			name = Release;
@@ -494,11 +487,13 @@
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "RKMacOSX/RKMacOSX-Prefix.pch";
+				HEADER_SEARCH_PATHS = "\"$(SOURCE_ROOT)/../../Build\"";
 				INFOPLIST_FILE = "RKMacOSX/RKMacOSX-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
 				);
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -513,11 +508,13 @@
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "RKMacOSX/RKMacOSX-Prefix.pch";
+				HEADER_SEARCH_PATHS = "\"$(SOURCE_ROOT)/../../Build\"";
 				INFOPLIST_FILE = "RKMacOSX/RKMacOSX-Info.plist";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
 				);
+				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};

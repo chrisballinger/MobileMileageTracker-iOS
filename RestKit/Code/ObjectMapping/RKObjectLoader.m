@@ -3,7 +3,19 @@
 //  RestKit
 //
 //  Created by Blake Watters on 8/8/09.
-//  Copyright 2009 Two Toasters. All rights reserved.
+//  Copyright 2009 Two Toasters
+//  
+//  Licensed under the Apache License, Version 2.0 (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at
+//  
+//  http://www.apache.org/licenses/LICENSE-2.0
+//  
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  See the License for the specific language governing permissions and
+//  limitations under the License.
 //
 
 #import "RKObjectLoader.h"
@@ -41,7 +53,7 @@
 
 - (id)initWithResourcePath:(NSString*)resourcePath objectManager:(RKObjectManager*)objectManager delegate:(id<RKObjectLoaderDelegate>)delegate {
 	if ((self = [super initWithURL:[objectManager.client URLForResourcePath:resourcePath] delegate:delegate])) {		
-        _objectManager = objectManager;        
+        _objectManager = objectManager;
         [self.objectManager.client setupRequest:self];
 	}
 
@@ -285,7 +297,7 @@
 
 // Invoked just before request hits the network
 - (BOOL)prepareURLRequest {
-    if (self.sourceObject && (self.method == RKRequestMethodPOST || self.method == RKRequestMethodPUT)) {
+    if ((self.sourceObject && self.params == nil) && (self.method == RKRequestMethodPOST || self.method == RKRequestMethodPUT)) {
         NSAssert(self.serializationMapping, @"Cannot send an object to the remote");
         RKLogDebug(@"POST or PUT request for source object %@, serializing to MIME Type %@ for transport...", self.sourceObject, self.serializationMIMEType);
         RKObjectSerializer* serializer = [RKObjectSerializer serializerWithObject:self.sourceObject mapping:self.serializationMapping];
@@ -315,9 +327,9 @@
     NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
     
 	if (_cachePolicy & RKRequestCachePolicyLoadOnError &&
-		[[[RKClient sharedClient] cache] hasResponseForRequest:self]) {
+		[self.cache hasResponseForRequest:self]) {
 
-		[self didFinishLoad:[[[RKClient sharedClient] cache] responseForRequest:self]];
+		[self didFinishLoad:[self.cache responseForRequest:self]];
 	} else {
         if ([_delegate respondsToSelector:@selector(request:didFailLoadWithError:)]) {
             [_delegate request:self didFailLoadWithError:error];
@@ -339,12 +351,12 @@
 	if ((_cachePolicy & RKRequestCachePolicyEtag) && [response isNotModified]) {
 		[_response release];
 		_response = nil;
-		_response = [[[[RKClient sharedClient] cache] responseForRequest:self] retain];
+		_response = [[self.cache responseForRequest:self] retain];
         [self updateInternalCacheDate];
 	}
 
 	if (![_response wasLoadedFromCache] && [_response isSuccessful] && (_cachePolicy != RKRequestCachePolicyNone)) {
-		[[[RKClient sharedClient] cache] storeResponse:_response forRequest:self];
+		[self.cache storeResponse:_response forRequest:self];
 	}
 
     if ([_delegate respondsToSelector:@selector(request:didLoadResponse:)]) {

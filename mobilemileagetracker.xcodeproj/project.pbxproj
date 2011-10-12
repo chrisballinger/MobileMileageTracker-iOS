@@ -286,9 +286,6 @@
 				D930880A143569BD00EFC33F /* API */,
 				D93087FA143567BA00EFC33F /* MTAppDelegate.h */,
 				D93087FB143567BA00EFC33F /* MTAppDelegate.m */,
-				D98D6D6014363F2A00B3B849 /* MTDeviceDetailViewController.h */,
-				D98D6D6114363F2A00B3B849 /* MTDeviceDetailViewController.m */,
-				D98D6D6214363F2A00B3B849 /* MTDeviceDetailViewController.xib */,
 				D930885C1435954F00EFC33F /* MTLocationTrackerController.h */,
 				D930885D1435954F00EFC33F /* MTLocationTrackerController.m */,
 				D930885E1435955000EFC33F /* MTLocationTrackerController.xib */,
@@ -304,6 +301,9 @@
 				D930886B1435980900EFC33F /* MTDeviceViewController.h */,
 				D930886C1435980900EFC33F /* MTDeviceViewController.m */,
 				D930886D1435980A00EFC33F /* MTDeviceViewController.xib */,
+				D98D6D6014363F2A00B3B849 /* MTDeviceDetailViewController.h */,
+				D98D6D6114363F2A00B3B849 /* MTDeviceDetailViewController.m */,
+				D98D6D6214363F2A00B3B849 /* MTDeviceDetailViewController.xib */,
 				D93087F2143567BA00EFC33F /* Supporting Files */,
 			);
 			path = mobilemileagetracker;
@@ -494,7 +494,6 @@
 		D9334F091439296400400F82 /* libRestKitJSONParser+NXJSON.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
-			name = "libRestKitJSONParser+NXJSON.a";
 			path = libRestKitJSONParserNXJSON.a;
 			remoteRef = D9334F081439296400400F82 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
@@ -544,7 +543,7 @@
 		D9334F171439296400400F82 /* UISpec.app */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.application;
-			path = UISpec.app;
+			path = RestKitSpecs.app;
 			remoteRef = D9334F161439296400400F82 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};

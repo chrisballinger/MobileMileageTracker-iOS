@@ -16,5 +16,6 @@
 
 @property BOOL isChoosingDevice;
 
+-(void)devicesLoaded;
 
 @end

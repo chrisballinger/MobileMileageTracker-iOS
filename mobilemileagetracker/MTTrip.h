@@ -19,6 +19,8 @@
 #define kTripDeviceKey @"device"
 
 #define kAPIURLTripSuffix @"trip/"
+#define kAPITripResourcePath @"trip/?limit=0"
+
 
 @interface MTTrip : MTAPIObject
 {

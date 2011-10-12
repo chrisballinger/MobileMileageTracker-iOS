@@ -60,6 +60,17 @@
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
+    RKObjectMapping* mapping = [RKObjectMapping mappingForClass:[SimpleAccount class]];
+    [mapping mapKeyPathsToAttributes:
+     @"id", @"accountID",
+     @"name", @"name",
+     @"balance", @"balance",
+     @"transactions.@count", @"transactionsCount",
+     @"transactions.@avg.amount", @"averageTransactionAmount",
+     @"transactions.@distinctUnionOfObjects.payee", @"distinctPayees",
+     nil];
+     
+    [[RKObjectManager sharedManager] loadObjectsAtResourcePath:@"/RKKeyValueMappingExample" objectMapping:mapping delegate:self];
 }
 
 - (void)objectLoader:(RKObjectLoader*)objectLoader didLoadObjects:(NSArray*)objects {

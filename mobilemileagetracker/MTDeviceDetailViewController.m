@@ -7,6 +7,7 @@
 //
 
 #import "MTDeviceDetailViewController.h"
+#import "MTObjectStore.h"
 
 @implementation MTDeviceDetailViewController
 @synthesize nameTextField;
@@ -83,20 +84,6 @@
     return YES;
 }
 
-- (void)requestFinished:(ASIFormDataRequest *)request
-{
-    NSLog(@"HTTP code %d:\n%@", [request responseStatusCode], [request responseString]);
-}
-
-- (void)requestFailed:(ASIFormDataRequest *)request
-{
-    NSError *error = [request error];
-    NSLog(@"%@",error);
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Network Error" message:@"A network error has occurred. Please try again later." delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
-    [alert show];
-    [alert release];
-}
-
 - (IBAction)savePressed:(id)sender 
 {
     if([nameTextField.text isEqualToString:@""] || [typeTextField.text isEqualToString:@""] || [UUIDTextField.text isEqualToString:@""])
@@ -107,13 +94,16 @@
     }
     else
     {
-        ASIFormDataRequest *request = [MTDevice requestWithURL:[MTDevice RESTurl] filters:nil];
         device.name = nameTextField.text;
         device.deviceType = typeTextField.text;
         device.uuid = UUIDTextField.text;
-        [request appendPostData:[device toJSON]];
-        [request setDelegate:self];
-        [request startAsynchronous];
+        
+        //NSError *error = [[[RKObjectManager sharedManager] objectStore] save];
+        //if(error)
+        //    NSLog(@"Error saving device: %@", error);
+        MTObjectStore *objectStore = [MTObjectStore sharedInstance];
+        
+        [objectStore.objectManager postObject:device delegate:objectStore];
     }
 }
 @end

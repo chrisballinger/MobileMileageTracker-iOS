@@ -56,8 +56,7 @@
     else
     {
         [MTTrip loadObjectsWithDelegate:self];
-
-        
+        [self objectLoader:nil didLoadObjects:[MTTrip cachedObjects]];
         
         /*ASIFormDataRequest *request = [MTAPIObject requestWithURL:[MTTrip RESTurl] filters:nil];
         [request setDelegate:self];
@@ -79,21 +78,6 @@
     NSLog(@"Encountered an error: %@", error);  
 }  
 
-- (void)requestFinished:(ASIFormDataRequest *)request
-{
-    [objectStore addObjects:[MTTrip objectsWithData:[request responseData]]];
-    NSLog(@"HTTP code %d:\n%@", [request responseStatusCode], [request responseString]);
-    [tripTableView reloadData];
-}
-
-- (void)requestFailed:(ASIFormDataRequest *)request
-{
-    NSError *error = [request error];
-    NSLog(@"%@",error);
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Network Error" message:@"A network error has occurred. Please try again later." delegate:nil cancelButtonTitle:nil otherButtonTitles:@"OK", nil];
-    [alert show];
-    [alert release];
-}
 
 - (void)viewDidUnload
 {

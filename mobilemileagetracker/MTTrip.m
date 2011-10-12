@@ -62,6 +62,11 @@
     
 }
 
++(NSArray*)cachedObjects
+{
+    return [MTObjectStore cachedObjectsForResourcePath:kAPITripResourcePath];
+}
+
 +(void)loadObjectsWithDelegate:(id<RKObjectLoaderDelegate>)delegate;
 {
     MTObjectStore *objectStore = [MTObjectStore sharedInstance];

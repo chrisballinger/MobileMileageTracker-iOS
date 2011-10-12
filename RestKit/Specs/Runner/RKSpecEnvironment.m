@@ -3,7 +3,19 @@
 //  RestKit
 //
 //  Created by Blake Watters on 3/14/11.
-//  Copyright 2011 Two Toasters. All rights reserved.
+//  Copyright 2011 Two Toasters
+//  
+//  Licensed under the Apache License, Version 2.0 (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at
+//  
+//  http://www.apache.org/licenses/LICENSE-2.0
+//  
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  See the License for the specific language governing permissions and
+//  limitations under the License.
 //
 
 #import "RKSpecEnvironment.h"
@@ -32,27 +44,24 @@ RKClient* RKSpecNewClient(void) {
     RKClient* client = [RKClient clientWithBaseURL:RKSpecGetBaseURL()];
     [RKClient setSharedClient:client];    
     [client release];
-    
-    RKSpecNewRequestQueue();
+    client.requestQueue.suspended = NO;
     
     return client;
 }
 
-RKRequestQueue* RKSpecNewRequestQueue(void) {
-    RKRequestQueue* requestQueue = [RKRequestQueue new];
-    requestQueue.suspended = NO;
-    [RKRequestQueue setSharedQueue:requestQueue];
-    [requestQueue release];
-    
-    return requestQueue;
+RKOAuthClient* RKSpecNewOAuthClient(RKSpecResponseLoader* loader){
+    [loader setTimeout:10];
+    RKOAuthClient* client = [RKOAuthClient clientWithClientID:@"appID" secret:@"appSecret" delegate:loader];
+    client.authorizationURL = [NSString stringWithFormat:@"%@/oauth/authorize",RKSpecGetBaseURL()];
+    return client;
 }
 
-RKObjectManager* RKSpecNewObjectManager(void) {
+
+RKObjectManager* RKSpecNewObjectManager(void) {    
+    [RKObjectMapping setDefaultDateFormatters:nil];
     RKObjectManager* objectManager = [RKObjectManager objectManagerWithBaseURL:RKSpecGetBaseURL()];
     [RKObjectManager setSharedManager:objectManager];
     [RKClient setSharedClient:objectManager.client];
-    
-    RKSpecNewRequestQueue();
     
     // This allows the manager to determine state.
     [[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.2]];

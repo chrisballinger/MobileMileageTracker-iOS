@@ -18,12 +18,15 @@
 
 -(id) init
 {
-    self = [super init];
+    self = [MTDevice object];
     if(self)
     {
         self.name = nil;
         self.deviceType = nil;
         self.uuid = nil;
+        self.resourceID = @"";
+        self.resourceURI = @"";
+        self.user = @"";
     }
     return self;
 }
@@ -66,15 +69,7 @@
 
 +(NSArray*)cachedObjects
 {
-    MTObjectStore *objectStore = [MTObjectStore sharedInstance];
-
-    NSArray* cachedObjects = nil; 
-    if (objectStore.objectManager.objectStore.managedObjectCache) { 
-        NSArray* cacheFetchRequests = [objectStore.objectManager.objectStore.managedObjectCache fetchRequestsForResourcePath:kAPIDeviceResourcePath]; 
-        cachedObjects = [NSManagedObject 
-                         objectsWithFetchRequests:cacheFetchRequests]; 
-    } 
-    return cachedObjects; 
+    return [MTObjectStore cachedObjectsForResourcePath:kAPIDeviceResourcePath];
 }
 
 +(void)loadObjectsWithDelegate:(id<RKObjectLoaderDelegate>)delegate;
