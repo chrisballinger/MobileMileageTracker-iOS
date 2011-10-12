@@ -51,7 +51,9 @@ static MTObjectStore *sharedStore = nil;
         RKManagedObjectMapping* tripMapping = [MTTrip mappingDefinition];
 
         [objectManager.mappingProvider setMapping:deviceMapping forKeyPath:@"devices"];
+        [objectManager.mappingProvider setSerializationMapping:[deviceMapping inverseMapping] forClass:deviceMapping.objectClass];
         [objectManager.mappingProvider setMapping:tripMapping forKeyPath:@"trips"];
+        
         
         RKObjectRouter* router = [[[RKObjectRouter alloc] init] autorelease];
         
