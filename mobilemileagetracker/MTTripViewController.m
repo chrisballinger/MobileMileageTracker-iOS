@@ -15,6 +15,7 @@
 @implementation MTTripViewController
 @synthesize tripTableView;
 @synthesize objectStore;
+@synthesize isChoosingTrip;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -22,7 +23,7 @@
     if (self) {
         // Custom initialization
         self.title = @"Trips";
-        objectStore = [MTObjectStore sharedInstance];
+        
     }
     return self;
 }
@@ -40,8 +41,16 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
     
+    if(isChoosingTrip)
+        self.title = @"Choose Trip";
+    else
+        self.title = @"Trips";
+    
+    objectStore = [MTObjectStore sharedInstance];
+    
+    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+    [center addObserver:self selector:@selector(tripsLoaded) name:kObjectsLoadedNotificationName object:nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -50,6 +59,7 @@
     if(![defaults objectForKey:@"username"] || ![defaults objectForKey:@"password"])
     {
         MTAccountController *accountController = [[MTAccountController alloc] init];
+        accountController.isModal = YES;
         [self.tabBarController presentModalViewController:accountController animated:animated];
         [accountController release];
     }
@@ -64,6 +74,11 @@
     }
 }
 
+-(void)tripsLoaded
+{
+    [tripTableView reloadData];
+}
+
 - (void)objectLoader:(RKObjectLoader*)objectLoader didLoadObjects:(NSArray*)objects {  
     [objectStore addObjects:objects];  
     [tripTableView reloadData];
@@ -72,6 +87,8 @@
     {
         NSLog(@"added %@",trip.name);
     }
+    
+    
 }  
 
 - (void)objectLoader:(RKObjectLoader*)objectLoader didFailWithError:(NSError*)error {  
@@ -82,9 +99,13 @@
 - (void)viewDidUnload
 {
     [self setTripTableView:nil];
+    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+    [center removeObserver:self];
+    
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
+
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -107,7 +128,10 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [[objectStore getTrips] count] + 1;   
+    if(!isChoosingTrip)
+        return [[objectStore getTrips] count] + 1;
+    else
+        return [[objectStore getTrips] count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -126,12 +150,13 @@
         cell.textLabel.text = trip.name;
         cell.detailTextLabel.text = trip.device.name;
     }
-    if(indexPath.row == [trips count])
+    if(indexPath.row == [trips count] && !isChoosingTrip)
     {
         cell.textLabel.text = @"Add New Trip";
     }
     
-    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    if(!isChoosingTrip)
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     
 	return cell;
 }
@@ -145,11 +170,28 @@
         NSArray *allTrips = [trips allValues];
         trip = [allTrips objectAtIndex:indexPath.row];
     }
-    MTTripDetailViewController *tripDetailController = [[MTTripDetailViewController alloc] init];
-    tripDetailController.trip = trip;
-    [self.navigationController pushViewController:tripDetailController animated:YES];
-    [tripDetailController release];
     
+    if(isChoosingTrip)
+    {
+        if(!trip)
+            NSLog(@"device is nil!");
+        
+        NSMutableDictionary *tripInfo = [[NSMutableDictionary alloc] initWithCapacity:1];
+        [tripInfo setObject:trip forKey:@"trip"];
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"TripChosenNotification" object:nil userInfo:tripInfo];
+        
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+    else
+    {
+        MTTripDetailViewController *tripDetailController = [[MTTripDetailViewController alloc] init];
+        tripDetailController.trip = trip;
+        [self.navigationController pushViewController:tripDetailController animated:YES];
+        [tripDetailController release];
+
+    }
+
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 

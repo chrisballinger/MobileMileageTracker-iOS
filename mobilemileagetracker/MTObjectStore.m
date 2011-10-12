@@ -51,18 +51,18 @@ static MTObjectStore *sharedStore = nil;
         
         RKManagedObjectMapping* deviceMapping = [MTDevice mappingDefinition];
         RKObjectMapping* inverseDeviceMapping = [deviceMapping inverseMapping];
-        //inverseDeviceMapping.setNilForMissingRelationships = YES;
-        //inverseDeviceMapping.setDefaultValueForMissingAttributes = YES;
+
         
         RKManagedObjectMapping* tripMapping = [MTTrip mappingDefinition];
         RKObjectMapping* inverseTripMapping = [tripMapping inverseMapping];
-        //inverseTripMapping.setNilForMissingRelationships = YES;
-        //inverseTripMapping.setDefaultValueForMissingAttributes = YES;
+
         
-        //RKObjectMapping *inverseTripMapping = [RKObjectMapping serializationMapping];
-        //[objectMapping mapKeyPath:@"key path on your model" toAttribute:@"key path in your JSON/Form Encoded output"]   
-        //[inverseTripMapping mapKeyPath:@"name" toAttribute:@"name"];
-        //[inverseTripMapping mapKeyPath:@"device" toAttribute:@"device.resourceURI"];
+        
+        RKManagedObjectMapping *locationMapping = [MTLocation mappingDefinition];
+        RKObjectMapping *inverseLocationMapping = [locationMapping inverseMapping];
+        [inverseLocationMapping removeMappingForKeyPath:@"trip"];
+        [inverseLocationMapping mapKeyPath:@"trip" toAttribute:@"(trip).resourceURI"];
+
 
 
         [objectManager.mappingProvider setMapping:deviceMapping forKeyPath:@"devices"];
@@ -72,11 +72,15 @@ static MTObjectStore *sharedStore = nil;
         [objectManager.mappingProvider setMapping:tripMapping forKeyPath:@"trips"];
         [objectManager.mappingProvider setSerializationMapping:inverseTripMapping forClass:[MTTrip class]];
         
+        [objectManager.mappingProvider setMapping:locationMapping forKeyPath:@"locations"];
+        [objectManager.mappingProvider setSerializationMapping:inverseLocationMapping forClass:[MTLocation class]];
+        
         
         RKObjectRouter* router = [[[RKObjectRouter alloc] init] autorelease];
         
         [router routeClass:[MTDevice class] toResourcePath:kAPIURLDeviceSuffix forMethod:RKRequestMethodPOST];
         [router routeClass:[MTTrip class] toResourcePath:kAPIURLTripSuffix forMethod:RKRequestMethodPOST];
+        [router routeClass:[MTLocation class] toResourcePath:kAPIURLLocationSuffix forMethod:RKRequestMethodPOST];
         objectManager.router = router;
         //[objectManager.router routeClass:[MTDevice class] toResourcePath:[kAPIURLDeviceSuffix stringByAppendingString:@"(resourceID)/"] forMethod:RKRequestMethodPUT];
 
@@ -136,7 +140,21 @@ static MTObjectStore *sharedStore = nil;
         else if([object isKindOfClass:[MTTrip class]])
             [tripStore setObject:object forKey:object.resourceURI];
         else if([object isKindOfClass:[MTLocation class]])
-            [locationStore setObject:object forKey:object.resourceURI];
+        {
+            MTLocation *location = (MTLocation*)object;
+            NSString *tripURI = location.trip.resourceURI;
+            NSMutableArray *locationsForTrip = [locationStore objectForKey:tripURI];
+                        
+            if(!locationsForTrip)
+            {
+                locationsForTrip = [NSMutableArray arrayWithObject:location];
+                [locationStore setObject:locationsForTrip forKey:tripURI];
+            }
+            else
+            {
+                [locationsForTrip addObject:location];
+            }
+        }
         
         [objectStore setObject:object forKey:object.resourceURI];
         
@@ -182,6 +200,10 @@ static MTObjectStore *sharedStore = nil;
 -(NSDictionary*)getObjects
 {
     return objectStore;
+}
+-(NSMutableArray*)locationsForTrip:(MTTrip*)trip
+{
+    return [locationStore objectForKey:trip.resourceURI];
 }
 
 +(NSArray*)cachedObjectsForResourcePath:(NSString*)resourcePath

@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <RestKit/RestKit.h>
 #import "MTAPIObject.h"
+#import "MTTrip.h"
 
 #define kObjectsLoadedNotificationName @"ObjectsLoadedNotification"
 
@@ -33,6 +34,7 @@
 -(NSDictionary*)getTrips;
 -(NSDictionary*)getLocations;
 -(NSDictionary*)getObjects;
+-(NSMutableArray*)locationsForTrip:(MTTrip*)trip;
 
 +(NSArray*)cachedObjectsForResourcePath:(NSString*)resourcePath;
 

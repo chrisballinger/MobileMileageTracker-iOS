@@ -10,6 +10,7 @@
 #import "MTDeviceViewController.h"
 #import "MTLocationTrackerController.h"
 #import "MTTripViewController.h"
+#import "MTAccountController.h"
 
 #import <RestKit/RestKit.h>  
 #import <RestKit/CoreData/CoreData.h>// If you are using Core Data… 
@@ -54,9 +55,10 @@
     UINavigationController *navController2 = [[UINavigationController alloc] initWithRootViewController:locationTrackerController];
     MTTripViewController *tripController = [[MTTripViewController alloc] init];
     UINavigationController *navController3 = [[UINavigationController alloc] initWithRootViewController:tripController];
+    MTAccountController *accountController = [[MTAccountController alloc] init];
     
     self.tabBarController = [[UITabBarController alloc] init];
-    self.tabBarController.viewControllers = [NSArray arrayWithObjects:navController, navController3, navController2, nil];
+    self.tabBarController.viewControllers = [NSArray arrayWithObjects:navController, navController3, navController2, accountController, nil];
     self.window.rootViewController = self.tabBarController;
     [self.window makeKeyAndVisible];
     return YES;
@@ -99,6 +101,19 @@
      Save data if appropriate.
      See also applicationDidEnterBackground:.
      */
+}
+
+-(void)didUpdateToLocation:(CLLocation*)location
+{
+    if(location)
+    {
+        NSLog(@"Background location update: %f, %f",location.coordinate.latitude, location.coordinate.longitude);
+        
+        NSMutableDictionary *locationInfo = [[NSMutableDictionary alloc] initWithCapacity:1];
+        [locationInfo setObject:location forKey:@"location"];
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"LocationUpdateNotification" object:nil userInfo:locationInfo];
+    }
 }
 
 @end

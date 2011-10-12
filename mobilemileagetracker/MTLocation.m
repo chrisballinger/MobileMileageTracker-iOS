@@ -19,6 +19,34 @@
 @dynamic horizontalAccuracy;
 @dynamic trip;
 
+-(id) init
+{
+    self = [MTLocation object];
+    if(self)
+    {
+        self.resourceID = nil;
+        self.resourceURI = nil;
+        self.user = nil;
+    }
+    return self;
+}
+
+
++(MTLocation*)locationWithLocation:(CLLocation*)location
+{
+    MTLocation *newLocation = [[MTLocation alloc] init];
+    
+    newLocation.latitude = [NSNumber numberWithDouble:location.coordinate.latitude];
+    newLocation.longitude = [NSNumber numberWithDouble:location.coordinate.longitude];
+    newLocation.timestamp = location.timestamp;
+    newLocation.altitude = [NSNumber numberWithDouble:location.altitude];
+    newLocation.verticalAccuracy = [NSNumber numberWithDouble:location.verticalAccuracy];
+    newLocation.horizontalAccuracy = [NSNumber numberWithDouble:location.horizontalAccuracy];
+    
+    return newLocation;
+}
+
+
 -(CLLocation*)location
 {
     CLLocationCoordinate2D coordinate;
@@ -34,33 +62,35 @@
 
 +(id<RKObjectMappingDefinition>)mappingDefinition
 {
-    /*RKObjectMapping* articleMapping = [RKObjectMapping mappingForClass:[MTLocation class]];
+    RKManagedObjectMapping* articleMapping = [RKManagedObjectMapping mappingForClass:[MTLocation class]];
     [articleMapping setPrimaryKeyAttribute:@"resourceID"];
     [articleMapping mapKeyPath:kIDKey toAttribute:@"resourceID"];
     [articleMapping mapKeyPath:kResourceURIKey toAttribute:@"resourceURI"];
     [articleMapping mapKeyPath:kUserKey toAttribute:@"user"];
-    [articleMapping mapKeyPath:kTripNameKey toAttribute:@"name"];
-    //[articleMapping mapKeyPath:kTripDeviceKey toAttribute:@"device"];
-    [articleMapping mapRelationship:kTripDeviceKey withMapping:[MTDevice mappingDefinition]];
+     
+    [articleMapping mapKeyPath:kLocationLatitudeKey toAttribute:@"latitude"];
+    [articleMapping mapKeyPath:kLocationLongitudeKey toAttribute:@"longitude"];
+    [articleMapping mapKeyPath:kLocationTimestampKey toAttribute:@"timestamp"];
+    [articleMapping mapKeyPath:kLocationAltitudeKey toAttribute:@"altitude"];
+    [articleMapping mapKeyPath:kLocationVerticalAccuracyKey toAttribute:@"verticalAccuracy"];
+    [articleMapping mapKeyPath:kLocationHorizontalAccuracyKey toAttribute:@"horizontalAccuracy"];
+    
+    [articleMapping mapRelationship:kLocationTripKey withMapping:[MTTrip mappingDefinition]];
     
     
     return articleMapping; 
-    */
-    return nil;
 }
 
 +(void)loadObjectsWithDelegate:(id<RKObjectLoaderDelegate>)delegate;
 {
-    /*MTObjectStore *objectStore = [MTObjectStore sharedInstance];
+    MTObjectStore *objectStore = [MTObjectStore sharedInstance];
     
-    RKObjectMapping* articleMapping = [MTTrip mappingDefinition];
+    RKObjectMapping* articleMapping = [MTDevice mappingDefinition];
     
     [objectStore.objectManager.mappingProvider setMapping:articleMapping forKeyPath:@"locations"];
     
     
     [objectStore.objectManager loadObjectsAtResourcePath:@"location/?limit=0" delegate:delegate];
-     
-     */
 }
 
 

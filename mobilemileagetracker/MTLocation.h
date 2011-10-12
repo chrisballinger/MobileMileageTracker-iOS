@@ -46,4 +46,6 @@
 
 -(CLLocation*)location;
 
++(MTLocation*)locationWithLocation:(CLLocation*)location;
+
 @end

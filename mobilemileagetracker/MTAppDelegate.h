@@ -7,11 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <CoreLocation/CoreLocation.h>
+
 
 @interface MTAppDelegate : UIResponder <UIApplicationDelegate, UITabBarControllerDelegate>
 
 @property (nonatomic, retain)  UIWindow *window;
 
 @property (nonatomic, retain)  UITabBarController *tabBarController;
+
+-(void)didUpdateToLocation:(CLLocation*)location;
 
 @end

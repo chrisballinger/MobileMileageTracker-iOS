@@ -14,4 +14,8 @@
 @property (retain, nonatomic) IBOutlet UITableView *tripTableView;
 @property (nonatomic, retain) MTObjectStore *objectStore;
 
+@property BOOL isChoosingTrip;
+
+-(void)tripsLoaded;
+
 @end

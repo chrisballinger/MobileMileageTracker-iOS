@@ -11,6 +11,7 @@
 @implementation MTAccountController
 @synthesize accountTextField;
 @synthesize passwordTextField;
+@synthesize isModal;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -67,7 +68,8 @@
     
     [defaults synchronize];
     
-    [self dismissModalViewControllerAnimated:YES];
+    if(isModal)
+        [self dismissModalViewControllerAnimated:YES];
 }
 
 -(BOOL)textFieldShouldReturn:(UITextField *)textField

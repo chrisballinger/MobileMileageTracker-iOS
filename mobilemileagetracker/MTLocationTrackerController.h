@@ -7,7 +7,28 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MTObjectStore.h"
+#import "MTTrip.h"
+#import "LocationController.h"
 
-@interface MTLocationTrackerController : UIViewController
+@interface MTLocationTrackerController : UIViewController <UITableViewDataSource, LocationControllerDelegate>
+{
+    MTObjectStore *objectStore;
+    NSMutableArray *locations;
+    MTTrip *trip;
+    
+    UIBarButtonItem *trackButton;
+    UIBarButtonItem *stopButton;
+}
+@property (retain, nonatomic) IBOutlet UITableView *trackerTableView;
+@property (retain, nonatomic) IBOutlet UIButton *tripButton;
+
+-(void)tripChosen:(NSNotification*)notification;
+-(void)locationUpdated:(NSNotification*)notification;
+
+
+- (IBAction)selectTripPressed:(id)sender;
+-(void)trackPressed;
+-(void)stopPressed;
 
 @end

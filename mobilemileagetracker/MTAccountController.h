@@ -14,4 +14,6 @@
 @property (retain, nonatomic) IBOutlet UITextField *passwordTextField;
 - (IBAction)loginPressed:(id)sender;
 
+@property BOOL isModal;
+
 @end

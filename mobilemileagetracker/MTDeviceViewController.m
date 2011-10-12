@@ -51,12 +51,14 @@
     [center addObserver:self selector:@selector(devicesLoaded) name:kObjectsLoadedNotificationName object:nil];
 }
 
+
 - (void)viewDidAppear:(BOOL)animated
 {
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     if(![defaults objectForKey:@"username"] || ![defaults objectForKey:@"password"])
     {
         MTAccountController *accountController = [[MTAccountController alloc] init];
+        accountController.isModal = YES;
         [self.tabBarController presentModalViewController:accountController animated:animated];
         [accountController release];
     }
@@ -95,9 +97,13 @@
 - (void)viewDidUnload
 {
     [self setDeviceTableView:nil];
+    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+    [center removeObserver:self];
+    
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
+
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
