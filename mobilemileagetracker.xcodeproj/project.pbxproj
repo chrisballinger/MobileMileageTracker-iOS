@@ -674,6 +674,10 @@
 		D9308800143567BA00EFC33F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = (
+					armv6,
+					"$(ARCHS_STANDARD_32_BIT)",
+				);
 				FRAMEWORK_SEARCH_PATHS = "$(SOURCE_ROOT)/RestKit/Build";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "mobilemileagetracker/mobilemileagetracker-Prefix.pch";
@@ -695,6 +699,10 @@
 		D9308801143567BA00EFC33F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = (
+					armv6,
+					"$(ARCHS_STANDARD_32_BIT)",
+				);
 				FRAMEWORK_SEARCH_PATHS = "$(SOURCE_ROOT)/RestKit/Build";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "mobilemileagetracker/mobilemileagetracker-Prefix.pch";

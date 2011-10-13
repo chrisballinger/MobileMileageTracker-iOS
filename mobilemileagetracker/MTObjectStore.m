@@ -60,10 +60,12 @@ static MTObjectStore *sharedStore = nil;
         
         RKManagedObjectMapping *locationMapping = [MTLocation mappingDefinition];
         RKObjectMapping *inverseLocationMapping = [locationMapping inverseMapping];
-        //[inverseLocationMapping removeMappingForKeyPath:@"trip"];
+        [inverseLocationMapping removeMappingForKeyPath:@"trip"];
+
+        [inverseLocationMapping mapKeyPath:@"trip.resourceURI" toAttribute:@"trip"];
+
         //[inverseLocationMapping mapKeyPath:@"trip" toAttribute:@"(trip).resourceURI"];
-
-
+        //[mapping mapKeyPath:@"nestedObject.attribute" toAttribute:@"whatIwantInTheJSON"]
 
         [objectManager.mappingProvider setMapping:deviceMapping forKeyPath:@"devices"];
         [objectManager.mappingProvider setSerializationMapping:inverseDeviceMapping forClass:[MTDevice class]];

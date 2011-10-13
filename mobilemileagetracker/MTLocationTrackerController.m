@@ -46,8 +46,8 @@
     [center addObserver:self selector:@selector(tripChosen:) name:@"TripChosenNotification" object:nil];
     [center addObserver:self selector:@selector(locationUpdated:) name:@"LocationUpdateNotification" object:nil];
     
-    trackButton = [[UIBarButtonItem alloc] initWithTitle:@"Start" style:UIBarButtonItemStylePlain target:self action:@selector(trackPressed)];
-    stopButton = [[UIBarButtonItem alloc] initWithTitle:@"Start" style:UIBarButtonItemStylePlain target:self action:@selector(stopPressed)];
+    trackButton = [[[UIBarButtonItem alloc] initWithTitle:@"Start" style:UIBarButtonItemStylePlain target:self action:@selector(trackPressed)] retain];
+    stopButton = [[[UIBarButtonItem alloc] initWithTitle:@"Start" style:UIBarButtonItemStylePlain target:self action:@selector(stopPressed)] retain];
     self.navigationItem.rightBarButtonItem = trackButton;
 }
 
@@ -59,6 +59,7 @@
         locController.delegate = self;
         [locController.locationManager startUpdatingLocation];
         self.navigationItem.rightBarButtonItem = stopButton;
+        tripButton.enabled = NO;
     }
     else
     {
@@ -74,6 +75,7 @@
     LocationController *locController = [LocationController sharedInstance];
     [locController.locationManager stopUpdatingLocation];
     self.navigationItem.rightBarButtonItem = trackButton;
+    tripButton.enabled = YES;
 }
 
 -(void)locationUpdated:(NSNotification *)notification
@@ -96,13 +98,13 @@
             newLocation.trip = trip;
             
             
-            //[objectStore.objectManager postObject:newLocation delegate:objectStore];
+            [objectStore.objectManager postObject:newLocation delegate:objectStore];
             
-            NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",[APIUtil RESTurlString],kAPIURLLocationSuffix]];
+            /*NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",[APIUtil RESTurlString],kAPIURLLocationSuffix]];
             ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
             [request appendPostData:[newLocation toJSON]];
             [request setDelegate:self];
-            [request startAsynchronous];
+            [request startAsynchronous];*/
             
             [objectStore.objectManager.objectStore.managedObjectContext deleteObject:newLocation];
             
