@@ -677,7 +677,10 @@
 				FRAMEWORK_SEARCH_PATHS = "$(SOURCE_ROOT)/RestKit/Build";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "mobilemileagetracker/mobilemileagetracker-Prefix.pch";
-				HEADER_SEARCH_PATHS = "$(SOURCE_ROOT)/RestKit/Build";
+				HEADER_SEARCH_PATHS = (
+					"$(SOURCE_ROOT)/RestKit/Vendor/JSONKit",
+					"$(SOURCE_ROOT)/RestKit/Build",
+				);
 				INFOPLIST_FILE = "mobilemileagetracker/mobilemileagetracker-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				OTHER_LDFLAGS = (
@@ -695,7 +698,10 @@
 				FRAMEWORK_SEARCH_PATHS = "$(SOURCE_ROOT)/RestKit/Build";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "mobilemileagetracker/mobilemileagetracker-Prefix.pch";
-				HEADER_SEARCH_PATHS = "$(SOURCE_ROOT)/RestKit/Build";
+				HEADER_SEARCH_PATHS = (
+					"$(SOURCE_ROOT)/RestKit/Vendor/JSONKit",
+					"$(SOURCE_ROOT)/RestKit/Build",
+				);
 				INFOPLIST_FILE = "mobilemileagetracker/mobilemileagetracker-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				OTHER_LDFLAGS = (

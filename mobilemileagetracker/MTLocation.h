@@ -48,4 +48,7 @@
 
 +(MTLocation*)locationWithLocation:(CLLocation*)location;
 
+// GRRRRRRRR!!!!
+-(NSData*)toJSON;
+
 @end

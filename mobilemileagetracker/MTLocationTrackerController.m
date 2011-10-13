@@ -10,6 +10,7 @@
 #import "MTLocation.h"
 #import "MTTripViewController.h"
 #import "LocationController.h"
+#import "APIUtil.h"
 
 @implementation MTLocationTrackerController
 @synthesize trackerTableView;
@@ -95,7 +96,13 @@
             newLocation.trip = trip;
             
             
-            [objectStore.objectManager postObject:newLocation delegate:objectStore];
+            //[objectStore.objectManager postObject:newLocation delegate:objectStore];
+            
+            NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",[APIUtil RESTurlString],kAPIURLLocationSuffix]];
+            ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
+            [request appendPostData:[newLocation toJSON]];
+            [request setDelegate:self];
+            [request startAsynchronous];
             
             [objectStore.objectManager.objectStore.managedObjectContext deleteObject:newLocation];
             
@@ -104,6 +111,17 @@
         
     }
 }
+
+- (void)requestFinished:(ASIHTTPRequest *)request
+{
+    NSLog(@"%d: %@", [request responseStatusCode], [request responseString]);
+}
+
+- (void)requestFailed:(ASIHTTPRequest *)request
+{
+    NSLog(@"%d: %@", [request responseStatusCode], [request responseString]);
+}
+
 - (void)locationError:(NSError *)error
 {
     NSLog(@"Location error: %@",[error description]);

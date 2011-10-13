@@ -8,6 +8,7 @@
 
 #import "MTLocation.h"
 #import "MTObjectStore.h"
+#import "JSONKit.h"
 
 @implementation MTLocation
 
@@ -55,6 +56,31 @@
     
     return [[[CLLocation alloc] initWithCoordinate:coordinate altitude:[self.altitude doubleValue] horizontalAccuracy:[self.horizontalAccuracy doubleValue] verticalAccuracy:[self.verticalAccuracy doubleValue] timestamp:self.timestamp] autorelease];
 
+}
+
+-(NSDictionary*)toDictionary
+{
+    /*Create Device
+     '{"device_type": "iPhone", "name": "Chris Phone", "uuid": "1"}'
+     */
+    CLLocation *location = [self location];
+    NSNumber *altitude = [NSNumber numberWithDouble:location.altitude];
+    NSNumber *horizontalAccuracy = [NSNumber numberWithDouble:location.horizontalAccuracy];
+    NSNumber *verticalAccuracy = [NSNumber numberWithDouble:location.verticalAccuracy];
+    NSNumber *latitude = [NSNumber numberWithDouble:location.coordinate.latitude];
+    NSNumber *longitude = [NSNumber numberWithDouble:location.coordinate.longitude];
+    NSDateFormatter *outFormat = [[NSDateFormatter alloc] init];
+    [outFormat setDateFormat:@"YYYY-MM-ddTHH:mm:ss"];
+    NSString *timestamp = [outFormat stringFromDate:location.timestamp];
+    
+    NSArray *objectArray = [NSArray arrayWithObjects:altitude, horizontalAccuracy, verticalAccuracy, latitude, longitude, timestamp, self.trip.resourceURI, nil];
+    NSArray *keyArray = [NSArray arrayWithObjects:kLocationAltitudeKey, kLocationHorizontalAccuracyKey, kLocationVerticalAccuracyKey, kLocationLatitudeKey, kLocationLongitudeKey, kLocationTimestampKey, kLocationTripKey, nil];
+    return [NSDictionary dictionaryWithObjects:objectArray forKeys:keyArray];
+}
+
+-(NSData*)toJSON
+{
+    return [[self toDictionary] JSONData];
 }
 
 #pragma mark -

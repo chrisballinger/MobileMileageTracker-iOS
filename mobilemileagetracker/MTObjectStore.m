@@ -60,8 +60,8 @@ static MTObjectStore *sharedStore = nil;
         
         RKManagedObjectMapping *locationMapping = [MTLocation mappingDefinition];
         RKObjectMapping *inverseLocationMapping = [locationMapping inverseMapping];
-        [inverseLocationMapping removeMappingForKeyPath:@"trip"];
-        [inverseLocationMapping mapKeyPath:@"trip" toAttribute:@"(trip).resourceURI"];
+        //[inverseLocationMapping removeMappingForKeyPath:@"trip"];
+        //[inverseLocationMapping mapKeyPath:@"trip" toAttribute:@"(trip).resourceURI"];
 
 
 
