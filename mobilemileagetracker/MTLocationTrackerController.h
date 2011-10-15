@@ -11,7 +11,7 @@
 #import "MTTrip.h"
 #import "LocationController.h"
 
-@interface MTLocationTrackerController : UIViewController <UITableViewDataSource, LocationControllerDelegate>
+@interface MTLocationTrackerController : UIViewController <UITableViewDataSource, LocationControllerDelegate, RKRequestDelegate>
 {
     MTObjectStore *objectStore;
     NSMutableArray *locations;

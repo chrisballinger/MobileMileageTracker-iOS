@@ -39,7 +39,6 @@ static MTObjectStore *sharedStore = nil;
         objectManager.client.username = [defaults objectForKey:@"username"];
         objectManager.client.password = [defaults objectForKey:@"password"];
         objectManager.serializationMIMEType = RKMIMETypeJSON;
-
         //objectManager.client.forceBasicAuthentication = YES;
 
         

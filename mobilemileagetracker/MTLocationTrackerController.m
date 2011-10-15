@@ -99,13 +99,20 @@
             newLocation.trip = trip;
             
             
-            [objectStore.objectManager postObject:newLocation delegate:objectStore];
+            // RESTKIT WHY DONT YOU WORK WHEN RUNNING IN THE BACKGROUND?!?!?!
+            //[objectStore.objectManager postObject:newLocation delegate:objectStore];
             
-            /*NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",[APIUtil RESTurlString],kAPIURLLocationSuffix]];
+            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+            NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",[APIUtil RESTurlString],kAPIURLLocationSuffix]];
             ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
+            [request addRequestHeader:@"User-Agent" value:@"ASIHTTPRequest"]; 
+            [request addRequestHeader:@"Content-Type" value:@"application/json"];
+            [request setUsername:[defaults objectForKey:@"username"]];
+            [request setPassword:[defaults objectForKey:@"password"]];
             [request appendPostData:[newLocation toJSON]];
             [request setDelegate:self];
-            [request startAsynchronous];*/
+            [request startAsynchronous];
+            
             
             [objectStore.objectManager.objectStore.managedObjectContext deleteObject:newLocation];
             
