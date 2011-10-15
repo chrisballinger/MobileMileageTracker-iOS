@@ -48,7 +48,7 @@
     
     trackButton = [[[UIBarButtonItem alloc] initWithTitle:@"Start" style:UIBarButtonItemStylePlain target:self action:@selector(trackPressed)] retain];
     stopButton = [[[UIBarButtonItem alloc] initWithTitle:@"Start" style:UIBarButtonItemStylePlain target:self action:@selector(stopPressed)] retain];
-    self.navigationItem.rightBarButtonItem = trackButton;
+    [self.navigationItem setRightBarButtonItem: trackButton];
 }
 
 -(void)trackPressed
@@ -58,7 +58,7 @@
         LocationController *locController = [LocationController sharedInstance];
         locController.delegate = self;
         [locController.locationManager startUpdatingLocation];
-        self.navigationItem.rightBarButtonItem = stopButton;
+        [self.navigationItem setRightBarButtonItem: stopButton];
         tripButton.enabled = NO;
     }
     else
@@ -74,7 +74,7 @@
 {
     LocationController *locController = [LocationController sharedInstance];
     [locController.locationManager stopUpdatingLocation];
-    self.navigationItem.rightBarButtonItem = trackButton;
+    [self.navigationItem setRightBarButtonItem: trackButton];
     tripButton.enabled = YES;
 }
 
@@ -82,6 +82,7 @@
 {
     if(trip)
     {
+        NSLog(@"background listener");
         CLLocation *location = [[notification userInfo] objectForKey:@"location"];
         [self locationUpdate:location];
     }

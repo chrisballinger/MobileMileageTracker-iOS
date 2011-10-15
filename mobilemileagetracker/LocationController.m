@@ -39,7 +39,7 @@ static LocationController* sharedCLDelegate = nil;
 	}
     
 
-    [(MTAppDelegate*)[UIApplication sharedApplication].delegate didUpdateToLocation:location];
+    [(MTAppDelegate*)[UIApplication sharedApplication].delegate didUpdateToLocation:newLocation];
 }
 
 - (void)locationManager:(CLLocationManager*)manager
