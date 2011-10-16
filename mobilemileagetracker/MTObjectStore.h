@@ -34,7 +34,7 @@
 -(NSDictionary*)getTrips;
 -(NSDictionary*)getLocations;
 -(NSDictionary*)getObjects;
--(NSMutableArray*)locationsForTrip:(MTTrip*)trip;
+-(NSArray*)locationsForTrip:(MTTrip*)trip;
 
 +(NSArray*)cachedObjectsForResourcePath:(NSString*)resourcePath;
 

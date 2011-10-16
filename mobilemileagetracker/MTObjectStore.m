@@ -145,18 +145,30 @@ static MTObjectStore *sharedStore = nil;
         {
             MTLocation *location = (MTLocation*)object;
             NSString *tripURI = location.trip.resourceURI;
-            NSMutableArray *locationsForTrip = [locationStore objectForKey:tripURI];
-            NSLog(@"adding location");
-                        
-            if(!locationsForTrip)
+            
+            NSLog(@"adding location: %@, %@: %f, %f",location.resourceURI,tripURI,[location coordinate].latitude,[location coordinate].longitude);            
+
+            if(tripURI)
             {
-                locationsForTrip = [NSMutableArray arrayWithObject:location];
-                [locationStore setObject:locationsForTrip forKey:tripURI];
+                NSMutableDictionary *locationsForTrip = [locationStore objectForKey:tripURI];
+                
+                if(!locationsForTrip)
+                {
+                    locationsForTrip = [[NSMutableDictionary alloc] initWithCapacity:1];
+                    [locationsForTrip setObject:location forKey:location.resourceURI];
+                    [locationStore setObject:locationsForTrip forKey:tripURI];
+                }
+                else
+                {
+                    [locationsForTrip setObject:location forKey:location.resourceURI];
+                }
+                NSLog(@"Location added!");
             }
             else
             {
-                [locationsForTrip addObject:location];
+                NSLog(@"Trip URI is nil!");
             }
+            
         }
         
         [objectStore setObject:object forKey:object.resourceURI];
@@ -204,9 +216,9 @@ static MTObjectStore *sharedStore = nil;
 {
     return objectStore;
 }
--(NSMutableArray*)locationsForTrip:(MTTrip*)trip
+-(NSArray*)locationsForTrip:(MTTrip*)trip
 {
-    return [locationStore objectForKey:trip.resourceURI];
+    return [[locationStore objectForKey:trip.resourceURI] allValues];
 }
 
 +(NSArray*)cachedObjectsForResourcePath:(NSString*)resourcePath

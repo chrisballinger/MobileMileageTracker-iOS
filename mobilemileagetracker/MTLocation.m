@@ -106,7 +106,7 @@
     [articleMapping mapKeyPath:kLocationVerticalAccuracyKey toAttribute:@"verticalAccuracy"];
     [articleMapping mapKeyPath:kLocationHorizontalAccuracyKey toAttribute:@"horizontalAccuracy"];
     
-    
+    [articleMapping mapRelationship:kLocationTripKey withMapping:[MTTrip mappingDefinition]];
     
     return articleMapping; 
 }

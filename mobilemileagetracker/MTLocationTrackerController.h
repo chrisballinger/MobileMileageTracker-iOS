@@ -15,7 +15,7 @@
 @interface MTLocationTrackerController : UIViewController <UITableViewDataSource, LocationControllerDelegate, RKRequestDelegate, RKObjectLoaderDelegate>
 {
     MTObjectStore *objectStore;
-    NSMutableArray *locations;
+    NSArray *locations;
     MTTrip *trip;
     
     UIBarButtonItem *trackButton;
