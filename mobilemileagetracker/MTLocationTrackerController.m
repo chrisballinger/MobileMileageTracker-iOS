@@ -54,7 +54,7 @@
 
 -(void)loadLocations
 {
-    [self objectLoader:nil didLoadObjects:[MTLocation cachedObjectsForTrip:trip]];
+    [self objectLoader:nil didLoadObjects:[MTLocation cachedObjects]];
     [MTLocation loadObjectsWithDelegate:self];
 }
 
@@ -177,7 +177,7 @@
     trip = [[[notification userInfo] objectForKey:@"trip"] retain];
     [tripButton setTitle:trip.name forState: UIControlStateNormal];
     
-    [self objectLoader:nil didLoadObjects:[MTLocation cachedObjectsForTrip:trip]];
+    [self objectLoader:nil didLoadObjects:[MTLocation cachedObjects]];
     [MTLocation loadObjectsWithDelegate:self];
     locations = [objectStore locationsForTrip:trip];
     

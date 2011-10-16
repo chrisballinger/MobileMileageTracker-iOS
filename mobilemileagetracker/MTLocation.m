@@ -136,4 +136,17 @@
     return [MTObjectStore cachedObjectsForResourcePath:resourcePath];
 }
 
++(NSArray*)cachedObjects
+{
+    return [MTObjectStore cachedObjectsForResourcePath:kAPILocationResourcePath];
+}
+
++(void)loadObjectsWithDelegate:(id<RKObjectLoaderDelegate>)delegate;
+{
+    MTObjectStore *objectStore = [MTObjectStore sharedInstance];
+    
+    [objectStore.objectManager loadObjectsAtResourcePath:kAPILocationResourcePath delegate:delegate];
+    
+}
+
 @end

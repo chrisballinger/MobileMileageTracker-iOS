@@ -22,13 +22,13 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          isPathRelative = "1"
-         filePath = "mobilemileagetracker/MTObjectStore.m"
-         timestampString = "340420968.487304"
+         filePath = "mobilemileagetracker/MTLocationTrackerController.m"
+         timestampString = "340421860.486021"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "138"
-         endingLineNumber = "138"
-         landmarkName = "-addObject:"
+         startingLineNumber = "57"
+         endingLineNumber = "57"
+         landmarkName = "-loadLocations"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

@@ -31,6 +31,8 @@
 #define kLocationTripKey @"trip"
 
 #define kAPIURLLocationSuffix @"location/"
+#define kAPILocationResourcePath @"location/?limit=0"
+
 
 @interface MTLocation : MTAPIObject <MKAnnotation>
 {
