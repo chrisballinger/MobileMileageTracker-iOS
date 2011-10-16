@@ -73,6 +73,7 @@ static MTObjectStore *sharedStore = nil;
         [objectManager.mappingProvider setMapping:tripMapping forKeyPath:@"trips"];
         [objectManager.mappingProvider setSerializationMapping:inverseTripMapping forClass:[MTTrip class]];
         
+
         [objectManager.mappingProvider setMapping:locationMapping forKeyPath:@"locations"];
         [objectManager.mappingProvider setSerializationMapping:inverseLocationMapping forClass:[MTLocation class]];
         
@@ -145,6 +146,7 @@ static MTObjectStore *sharedStore = nil;
             MTLocation *location = (MTLocation*)object;
             NSString *tripURI = location.trip.resourceURI;
             NSMutableArray *locationsForTrip = [locationStore objectForKey:tripURI];
+            NSLog(@"adding location");
                         
             if(!locationsForTrip)
             {

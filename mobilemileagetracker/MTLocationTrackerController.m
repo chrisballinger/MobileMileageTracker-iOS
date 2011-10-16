@@ -52,12 +52,39 @@
     [self.navigationItem setRightBarButtonItem: trackButton];
 }
 
+-(void)loadLocations
+{
+    [self objectLoader:nil didLoadObjects:[MTLocation cachedObjectsForTrip:trip]];
+    [MTLocation loadObjectsWithDelegate:self];
+}
+
+- (void)objectLoader:(RKObjectLoader*)objectLoader didLoadObjects:(NSArray*)objects {  
+    [objectStore addObjects:objects];  
+
+    NSLog(@"Added locations to objectstore");  
+    for(MTLocation *location in objects)
+    {
+        NSLog(@"added %f, %f",[location.latitude doubleValue],[location.longitude doubleValue]);
+    }
+    locations = [objectStore locationsForTrip:trip];
+    
+    if(locations && [locations count] > 0)
+    {
+        NSLog(@"raw vs fetched locations count: %d / %d", [objects count], [locations count]);
+        [trackerTableView reloadData];
+    }
+}  
+
+- (void)objectLoader:(RKObjectLoader*)objectLoader didFailWithError:(NSError*)error {  
+    NSLog(@"Encountered an error: %@", error);  
+}
+
 -(void)trackPressed
 {
     if(trip)
     {
         LocationController *locController = [LocationController sharedInstance];
-        locController.delegate = self;
+        //locController.delegate = self;
         [locController.locationManager startUpdatingLocation];
         [self.navigationItem setRightBarButtonItem: stopButton];
         tripButton.enabled = NO;
@@ -108,6 +135,7 @@
             
             // RESTKIT WHY DONT YOU WORK WHEN RUNNING IN THE BACKGROUND?!?!?!
             //[objectStore.objectManager postObject:newLocation delegate:objectStore];
+
             
             NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
             NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",[APIUtil RESTurlString],kAPIURLLocationSuffix]];
@@ -146,15 +174,21 @@
 
 -(void)tripChosen:(NSNotification*)notification
 {
-    trip = [[notification userInfo] objectForKey:@"trip"];
+    trip = [[[notification userInfo] objectForKey:@"trip"] retain];
     [tripButton setTitle:trip.name forState: UIControlStateNormal];
     
+    [self objectLoader:nil didLoadObjects:[MTLocation cachedObjectsForTrip:trip]];
+    [MTLocation loadObjectsWithDelegate:self];
     locations = [objectStore locationsForTrip:trip];
     
     if(!locations)
         locations = [[[NSMutableArray alloc] initWithCapacity:1] autorelease];
     
     [trackerTableView reloadData];
+    
+
+    
+    timer = [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(loadLocations) userInfo:nil repeats:YES];
 }
 
 - (IBAction)selectTripPressed:(id)sender 

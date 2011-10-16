@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 
 #define kHostURL @"http://chrisballinger.pagekite.me/"
+#define kAPIURLPrefix @"api/v1/"
 
 @interface APIUtil : NSObject
 

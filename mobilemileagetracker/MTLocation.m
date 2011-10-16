@@ -9,6 +9,7 @@
 #import "MTLocation.h"
 #import "MTObjectStore.h"
 #import "JSONKit.h"
+#import "APIUtil.h"
 
 @implementation MTLocation
 
@@ -78,6 +79,10 @@
     return [NSDictionary dictionaryWithObjects:objectArray forKeys:keyArray];
 }
 
+- (CLLocationCoordinate2D) coordinate {
+    return [self location].coordinate;
+}
+
 -(NSData*)toJSON
 {
     return [[self toDictionary] JSONData];
@@ -101,24 +106,34 @@
     [articleMapping mapKeyPath:kLocationVerticalAccuracyKey toAttribute:@"verticalAccuracy"];
     [articleMapping mapKeyPath:kLocationHorizontalAccuracyKey toAttribute:@"horizontalAccuracy"];
     
-    [articleMapping mapRelationship:kLocationTripKey withMapping:[MTTrip mappingDefinition]];
     
     
     return articleMapping; 
 }
 
-+(void)loadObjectsWithDelegate:(id<RKObjectLoaderDelegate>)delegate;
++(void)loadObjectsWithDelegate:(id<RKObjectLoaderDelegate>)delegate trip:(MTTrip*)trip
 {
     MTObjectStore *objectStore = [MTObjectStore sharedInstance];
     
-    RKObjectMapping* articleMapping = [MTDevice mappingDefinition];
+    RKObjectMapping* articleMapping = [MTLocation mappingDefinition];
     
     [objectStore.objectManager.mappingProvider setMapping:articleMapping forKeyPath:@"locations"];
     
+    NSString *resourcePath = [NSString stringWithFormat:@"%@?limit=0&trip=%@", kAPIURLLocationSuffix,trip.resourceID];
     
-    [objectStore.objectManager loadObjectsAtResourcePath:@"location/?limit=0" delegate:delegate];
+    NSLog(@"load trip: %@ resource path: %@", trip.name, resourcePath);
+          
+    [objectStore.objectManager loadObjectsAtResourcePath:resourcePath delegate:delegate];
 }
 
++(NSArray*)cachedObjectsForTrip:(MTTrip*)trip
+{
 
+    NSString *resourcePath = [NSString stringWithFormat:@"%@?limit=0&trip=%@", kAPIURLLocationSuffix,trip.resourceID];
+    NSLog(@"cache trip: %@ resource path: %@", trip.name, resourcePath);
+
+    
+    return [MTObjectStore cachedObjectsForResourcePath:resourcePath];
+}
 
 @end

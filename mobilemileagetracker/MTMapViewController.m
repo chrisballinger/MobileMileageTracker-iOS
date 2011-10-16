@@ -55,6 +55,8 @@
     
     [locationMapView regionThatFits:region];
     
+
+    
     //PlaceAnnotation *someAnnotation = [[[PlaceAnnotation alloc] initWithLatitude:37.786521 longitude:-122.397850 ] autorelease];
     
     //[currentMapView addAnnotation:someAnnotation];
@@ -79,6 +81,20 @@
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
+}
+
+-(void)viewDidAppear:(BOOL)animated
+{
+    LocationController *locController = [LocationController sharedInstance];
+    //locController.delegate = self;
+    [locController.locationManager startUpdatingLocation];
+}
+
+-(void)viewDidDisappear:(BOOL)animated
+{
+    LocationController *locController = [LocationController sharedInstance];
+    //locController.delegate = self;
+    [locController.locationManager stopUpdatingLocation];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation

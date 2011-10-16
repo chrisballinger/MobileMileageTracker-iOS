@@ -10,7 +10,6 @@
 
 @implementation APIUtil
 
-#define kAPIURLPrefix @"api/v1/"
 
 +(NSString*)hostURLString
 {

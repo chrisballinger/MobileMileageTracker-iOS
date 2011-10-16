@@ -9,6 +9,7 @@
 #import "MTAPIObject.h"
 #import <CoreLocation/CoreLocation.h>
 #import "MTTrip.h"
+#import <MapKit/MapKit.h>
 
 /*
  latitude = models.FloatField()
@@ -31,7 +32,7 @@
 
 #define kAPIURLLocationSuffix @"location/"
 
-@interface MTLocation : MTAPIObject
+@interface MTLocation : MTAPIObject <MKAnnotation>
 {
     
 }
@@ -50,5 +51,9 @@
 
 // GRRRRRRRR!!!!
 -(NSData*)toJSON;
+
++(void)loadObjectsWithDelegate:(id<RKObjectLoaderDelegate>)delegate trip:(MTTrip*)trip;
++(NSArray*)cachedObjectsForTrip:(MTTrip*)trip;
+
 
 @end

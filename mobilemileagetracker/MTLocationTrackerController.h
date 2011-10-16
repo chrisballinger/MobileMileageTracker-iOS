@@ -10,8 +10,9 @@
 #import "MTObjectStore.h"
 #import "MTTrip.h"
 #import "LocationController.h"
+#import <RestKit/RestKit.h>
 
-@interface MTLocationTrackerController : UIViewController <UITableViewDataSource, LocationControllerDelegate, RKRequestDelegate>
+@interface MTLocationTrackerController : UIViewController <UITableViewDataSource, LocationControllerDelegate, RKRequestDelegate, RKObjectLoaderDelegate>
 {
     MTObjectStore *objectStore;
     NSMutableArray *locations;
@@ -19,6 +20,7 @@
     
     UIBarButtonItem *trackButton;
     UIBarButtonItem *stopButton;
+    NSTimer *timer;
 }
 @property (retain, nonatomic) IBOutlet UITableView *trackerTableView;
 @property (retain, nonatomic) IBOutlet UIButton *tripButton;
@@ -31,5 +33,7 @@
 -(void)trackPressed;
 -(void)stopPressed;
 - (IBAction)mapPressed:(id)sender;
+
+-(void)loadLocations;
 
 @end
