@@ -11,6 +11,7 @@
 #import "MTTripViewController.h"
 #import "LocationController.h"
 #import "APIUtil.h"
+#import "MTMapViewController.h"
 
 @implementation MTLocationTrackerController
 @synthesize trackerTableView;
@@ -47,7 +48,7 @@
     [center addObserver:self selector:@selector(locationUpdated:) name:@"LocationUpdateNotification" object:nil];
     
     trackButton = [[[UIBarButtonItem alloc] initWithTitle:@"Start" style:UIBarButtonItemStylePlain target:self action:@selector(trackPressed)] retain];
-    stopButton = [[[UIBarButtonItem alloc] initWithTitle:@"Start" style:UIBarButtonItemStylePlain target:self action:@selector(stopPressed)] retain];
+    stopButton = [[[UIBarButtonItem alloc] initWithTitle:@"Stop" style:UIBarButtonItemStylePlain target:self action:@selector(stopPressed)] retain];
     [self.navigationItem setRightBarButtonItem: trackButton];
 }
 
@@ -76,6 +77,12 @@
     [locController.locationManager stopUpdatingLocation];
     [self.navigationItem setRightBarButtonItem: trackButton];
     tripButton.enabled = YES;
+}
+
+- (IBAction)mapPressed:(id)sender {
+    MTMapViewController *mapView = [[MTMapViewController alloc] init];
+    [self.navigationController pushViewController:mapView animated:YES];
+    [mapView release];
 }
 
 -(void)locationUpdated:(NSNotification *)notification

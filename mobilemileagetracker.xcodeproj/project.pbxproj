@@ -55,6 +55,9 @@
 		D98D6D7A14365AF500B3B849 /* MTTripDetailViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D98D6D7814365AF400B3B849 /* MTTripDetailViewController.xib */; };
 		D9E84E4A143BB88C00D6EDA2 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D9E84E48143BB88B00D6EDA2 /* Model.xcdatamodeld */; };
 		D9E84E52143BC64200D6EDA2 /* MTObjectCache.m in Sources */ = {isa = PBXBuildFile; fileRef = D9E84E51143BC64100D6EDA2 /* MTObjectCache.m */; };
+		D9F28DBA144A558E0020B31E /* MTMapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D9F28DB8144A558E0020B31E /* MTMapViewController.m */; };
+		D9F28DBB144A558E0020B31E /* MTMapViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D9F28DB9144A558E0020B31E /* MTMapViewController.xib */; };
+		D9F28DBD144A575E0020B31E /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D9F28DBC144A575E0020B31E /* MapKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -222,6 +225,10 @@
 		D9E84E49143BB88C00D6EDA2 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		D9E84E50143BC64100D6EDA2 /* MTObjectCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTObjectCache.h; sourceTree = "<group>"; };
 		D9E84E51143BC64100D6EDA2 /* MTObjectCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTObjectCache.m; sourceTree = "<group>"; };
+		D9F28DB7144A558E0020B31E /* MTMapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MTMapViewController.h; sourceTree = "<group>"; };
+		D9F28DB8144A558E0020B31E /* MTMapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MTMapViewController.m; sourceTree = "<group>"; };
+		D9F28DB9144A558E0020B31E /* MTMapViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MTMapViewController.xib; sourceTree = "<group>"; };
+		D9F28DBC144A575E0020B31E /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -229,6 +236,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D9F28DBD144A575E0020B31E /* MapKit.framework in Frameworks */,
 				D93088681435964700EFC33F /* CoreLocation.framework in Frameworks */,
 				D9334F2614392D0600400F82 /* libRestKitJSONParserJSONKit.a in Frameworks */,
 				D9334F2114392B5E00400F82 /* CoreData.framework in Frameworks */,
@@ -252,6 +260,7 @@
 		D93087DC143567BA00EFC33F = {
 			isa = PBXGroup;
 			children = (
+				D9F28DBC144A575E0020B31E /* MapKit.framework */,
 				D93087F1143567BA00EFC33F /* mobilemileagetracker */,
 				D930884B143571B300EFC33F /* 3rd Party Frameworks */,
 				D93087EA143567BA00EFC33F /* Frameworks */,
@@ -294,6 +303,9 @@
 				D930885C1435954F00EFC33F /* MTLocationTrackerController.h */,
 				D930885D1435954F00EFC33F /* MTLocationTrackerController.m */,
 				D930885E1435955000EFC33F /* MTLocationTrackerController.xib */,
+				D9F28DB7144A558E0020B31E /* MTMapViewController.h */,
+				D9F28DB8144A558E0020B31E /* MTMapViewController.m */,
+				D9F28DB9144A558E0020B31E /* MTMapViewController.xib */,
 				D9308853143593FB00EFC33F /* MTAccountController.h */,
 				D9308854143593FB00EFC33F /* MTAccountController.m */,
 				D9308855143593FC00EFC33F /* MTAccountController.xib */,
@@ -566,6 +578,7 @@
 				D98D6D6414363F2A00B3B849 /* MTDeviceDetailViewController.xib in Resources */,
 				D98D6D751436593D00B3B849 /* MTTripViewController.xib in Resources */,
 				D98D6D7A14365AF500B3B849 /* MTTripDetailViewController.xib in Resources */,
+				D9F28DBB144A558E0020B31E /* MTMapViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -603,6 +616,7 @@
 				D9E84E4A143BB88C00D6EDA2 /* Model.xcdatamodeld in Sources */,
 				D9E84E52143BC64200D6EDA2 /* MTObjectCache.m in Sources */,
 				D9896B3F14463F49003EDAC7 /* LocationController.m in Sources */,
+				D9F28DBA144A558E0020B31E /* MTMapViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

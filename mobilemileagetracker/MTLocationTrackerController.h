@@ -30,5 +30,6 @@
 - (IBAction)selectTripPressed:(id)sender;
 -(void)trackPressed;
 -(void)stopPressed;
+- (IBAction)mapPressed:(id)sender;
 
 @end

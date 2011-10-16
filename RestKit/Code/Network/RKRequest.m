@@ -92,7 +92,12 @@
     self = [super init];
     if (self) {        
 #if TARGET_OS_IPHONE
-        _backgroundPolicy = RKRequestBackgroundPolicyNone;
+        
+        // more sensible modern default
+        _backgroundPolicy = RKRequestBackgroundPolicyContinue;
+        //_backgroundPolicy = RKRequestBackgroundPolicyNone;
+
+        
         _backgroundTaskIdentifier = 0; 
         BOOL backgroundOK = &UIBackgroundTaskInvalid != NULL;
         if (backgroundOK) {
