@@ -135,8 +135,11 @@
             
             // RESTKIT WHY DONT YOU WORK WHEN RUNNING IN THE BACKGROUND?!?!?!
             //[objectStore.objectManager postObject:newLocation delegate:objectStore];
-
+            [objectStore.objectManager postObject:newLocation delegate:objectStore block:^(RKObjectLoader* loader) {
+                loader.backgroundPolicy = RKRequestBackgroundPolicyContinue;
+            }];
             
+            /*
             NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
             NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@",[APIUtil RESTurlString],kAPIURLLocationSuffix]];
             ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
@@ -147,7 +150,7 @@
             [request appendPostData:[newLocation toJSON]];
             [request setDelegate:self];
             [request startAsynchronous];
-            
+            */
             
             [objectStore.objectManager.objectStore.managedObjectContext deleteObject:newLocation];
             

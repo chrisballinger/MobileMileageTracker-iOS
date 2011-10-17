@@ -73,7 +73,7 @@ Quick Start (aka TL;DR)
 1. Link against required frameworks:
     1. **CFNetwork.framework**
     1. **CoreData.framework**
-    1. **MobileCoreServices.framework**
+    1. **MobileCoreServices.framework** on iOS or **CoreServices.framework** on OS X
     1. **SystemConfiguration.framework**
     1. **libxml2.dylib**
 1. Link against RestKit static library products:
@@ -98,6 +98,14 @@ A Google Group for development and usage of library is available at: [http://gro
 
 Follow RestKit on Twitter:[http://twitter.com/restkit](http://twitter.com/restkit)
 
-### RestKit is brought to you by [Two Toasters](http://www.twotoasters.com/). ###
+Credits
+-------------------------
+
+RestKit is brought to you by [Blake Watters](http://twitter.com/blakewatters) and the RestKit Team.
+
+Support is provided by the following organizations:
+
+* [GateGuru](http://www.gateguruapp.com/)
+* [Two Toasters](http://www.twotoasters.com/)
 
 [Object Mapping Design Document]: https://github.com/RestKit/RestKit/blob/master/Docs/Object%20Mapping.md

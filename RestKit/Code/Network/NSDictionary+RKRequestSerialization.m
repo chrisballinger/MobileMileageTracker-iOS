@@ -19,67 +19,54 @@
 //
 
 #import "NSDictionary+RKRequestSerialization.h"
+#import "NSString+RestKit.h"
 #import "../Support/RKFixCategoryBug.h"
 
 RK_FIX_CATEGORY_BUG(NSDictionary_RKRequestSerialization)
 
-/**
- * private helper function to convert any object to its string representation
- * @private
- */
-static NSString *toString(id object) {
-	return [NSString stringWithFormat: @"%@", object];
-}
-
-/**
- * private helper function to convert string to UTF-8 and URL encode it
- * @private
- */
-static NSString *urlEncode(id object) {
-	NSString *string = toString(object);
-	NSString *encodedString = (NSString*)CFURLCreateStringByAddingPercentEscapes(NULL,
-																				 (CFStringRef)string,
-																				 NULL,
-																				 (CFStringRef)@"!*'();:@&=+$,/?%#[]",
-																				 kCFStringEncodingUTF8);
-	return [encodedString autorelease];
-}
 
 @implementation NSDictionary (RKRequestSerialization)
 
 - (void)URLEncodePart:(NSMutableArray*)parts path:(NSString*)path value:(id)value {
-    [parts addObject:[NSString stringWithFormat: @"%@=%@", path, urlEncode(value)]];
+    NSString *encodedPart = [[value description] stringByAddingURLEncoding];
+    [parts addObject:[NSString stringWithFormat: @"%@=%@", path, encodedPart]];
 }
 
 - (void)URLEncodeParts:(NSMutableArray*)parts path:(NSString*)inPath {
-    [self enumerateKeysAndObjectsUsingBlock:^(id key, id value, BOOL *stop)
-    {
-        NSString* path = inPath ? [inPath stringByAppendingFormat:@"[%@]", urlEncode(key)] : urlEncode(key);
-        if( [value isKindOfClass:[NSArray class]] )
-        {
-			for( id item in value )
-            {
-                [self URLEncodePart:parts path:[path stringByAppendingString:@"[]"] value:item];
+    [self enumerateKeysAndObjectsUsingBlock:^(id key, id value, BOOL *stop) {
+        NSString *encodedKey = [[key description] stringByAddingURLEncoding];
+        NSString *path = inPath ? [inPath stringByAppendingFormat:@"[%@]", encodedKey] : encodedKey;
+        
+        if ([value isKindOfClass:[NSArray class]]) {
+			for (id item in value) {
+                if ([item isKindOfClass:[NSDictionary class]] || [item isKindOfClass:[NSMutableDictionary class]]) {
+                    [item URLEncodeParts:parts path:[path stringByAppendingString:@"[]"]];
+                } else {
+                    [self URLEncodePart:parts path:[path stringByAppendingString:@"[]"] value:item];
+                }
+
             }
-        }
-        else if([value isKindOfClass:[NSDictionary class]] || [value isKindOfClass:[NSMutableDictionary class]])
-        {
+        } else if([value isKindOfClass:[NSDictionary class]] || [value isKindOfClass:[NSMutableDictionary class]]) {
             [value URLEncodeParts:parts path:path];
         }
-        else
-        {
+        else {
             [self URLEncodePart:parts path:path value:value];
         }
     }];
 }
 
-- (NSString*)URLEncodedString {
+// TODO: Move to NSDictionary+RestKit
+- (NSString *)stringWithURLEncodedEntries {
     NSMutableArray* parts = [NSMutableArray array];
     [self URLEncodeParts:parts path:nil];
     return [parts componentsJoinedByString:@"&"];
 }
 
-- (NSString*)HTTPHeaderValueForContentType {
+- (NSString *)URLEncodedString {
+    return [self stringWithURLEncodedEntries];
+}
+
+- (NSString *)HTTPHeaderValueForContentType {
 	return @"application/x-www-form-urlencoded";
 }
 
