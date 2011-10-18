@@ -260,7 +260,6 @@
 		D93087DC143567BA00EFC33F = {
 			isa = PBXGroup;
 			children = (
-				D9F28DBC144A575E0020B31E /* MapKit.framework */,
 				D93087F1143567BA00EFC33F /* mobilemileagetracker */,
 				D930884B143571B300EFC33F /* 3rd Party Frameworks */,
 				D93087EA143567BA00EFC33F /* Frameworks */,
@@ -279,6 +278,7 @@
 		D93087EA143567BA00EFC33F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D9F28DBC144A575E0020B31E /* MapKit.framework */,
 				D9334F2014392B5E00400F82 /* CoreData.framework */,
 				D93088691435965600EFC33F /* MobileCoreServices.framework */,
 				D93088671435964600EFC33F /* CoreLocation.framework */,

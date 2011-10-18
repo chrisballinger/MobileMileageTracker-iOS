@@ -59,7 +59,7 @@
 }
 
 - (void)objectLoader:(RKObjectLoader*)objectLoader didLoadObjects:(NSArray*)objects {  
-    [objectStore addObjects:objects];  
+    /*[objectStore addObjects:objects];  
 
     NSLog(@"Added locations to objectstore");  
     for(MTLocation *location in objects)
@@ -72,7 +72,12 @@
     {
         NSLog(@"raw vs fetched locations count: %d / %d", [objects count], [locations count]);
         [trackerTableView reloadData];
-    }
+    }*/
+    if(locations)
+        [locations release];
+    locations = objects;
+    [locations retain];
+    [trackerTableView reloadData];
 }  
 
 - (void)objectLoader:(RKObjectLoader*)objectLoader didFailWithError:(NSError*)error {  
@@ -184,14 +189,14 @@
     [MTLocation loadObjectsWithDelegate:self];
     locations = [objectStore locationsForTrip:trip];
     
-    if(!locations)
-        locations = [[[NSMutableArray alloc] initWithCapacity:1] autorelease];
+    //if(!locations)
+    //    locations = [[[NSMutableArray alloc] initWithCapacity:1] autorelease];
     
     [trackerTableView reloadData];
     
 
     
-    timer = [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(loadLocations) userInfo:nil repeats:YES];
+    // timer = [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(loadLocations) userInfo:nil repeats:YES];
 }
 
 - (IBAction)selectTripPressed:(id)sender 
@@ -220,17 +225,22 @@
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *) tableView {
+- (NSInteger)numberOfSectionsInTableView:(UITableView *) tableView 
+{
     return 1;
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section 
+{
     return @"";
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-
-    return [locations count];
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section 
+{
+    if(locations)
+        return [locations count];
+    else
+        return 0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -241,14 +251,18 @@
 		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"Cell"];
 	}
 	
-    MTLocation *location = [locations objectAtIndex:indexPath.row];
-    
-    NSString *textLabel = [NSString stringWithFormat:@"%f, %f",[location.latitude floatValue], [location.longitude floatValue]];
-    
-    cell.textLabel.text = textLabel;
-    cell.detailTextLabel.text = [location.timestamp description];
-    
-	return cell;
+    if(locations)
+    {
+        MTLocation *location = [locations objectAtIndex:indexPath.row];
+        
+        NSString *textLabel = [NSString stringWithFormat:@"%f, %f",[location.latitude floatValue], [location.longitude floatValue]];
+        
+        cell.textLabel.text = textLabel;
+        cell.detailTextLabel.text = [location.timestamp description];
+        NSLog(@"location id: %@ trip: %@",location.resourceID,location.trip.name);
+        return cell;
+    }
+    return nil;
 }
 
 - (void)dealloc {
